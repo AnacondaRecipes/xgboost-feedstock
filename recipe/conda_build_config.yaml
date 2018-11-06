@@ -6,5 +6,5 @@ cudatoolkit:
   - 9.0
 python:
   - 2.7                # [linux]
-  - 3.5
   - 3.6
+  - 3.7

@@ -1,4 +1,4 @@
-From 7cc4982161c1948f632b313565a41fe8ca819898 Mon Sep 17 00:00:00 2001
+From 3b5142257f90ae82828f15e0531d5c3862dc20b9 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Thu, 15 Mar 2018 12:18:38 -0700
 Subject: [PATCH 4/5] Fix configure check for OpenMP on macOS
@@ -10,7 +10,7 @@ RBIN was not getting set.
  2 files changed, 17 insertions(+), 1 deletion(-)
 
 diff --git a/R-package/configure b/R-package/configure
-index 7db7190b..6a9783b5 100755
+index 6c14550c..46fbe6da 100755
 --- a/R-package/configure
 +++ b/R-package/configure
 @@ -1663,6 +1663,14 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
@@ -29,7 +29,7 @@ index 7db7190b..6a9783b5 100755
  
  if test `uname -s` = "Linux"
 diff --git a/R-package/configure.ac b/R-package/configure.ac
-index d9b706ec..302a61fc 100644
+index a2a05d22..1bee0b92 100644
 --- a/R-package/configure.ac
 +++ b/R-package/configure.ac
 @@ -2,7 +2,15 @@
@@ -50,5 +50,5 @@ index d9b706ec..302a61fc 100644
  OPENMP_CXXFLAGS=""
  
 -- 
-2.18.0
+2.17.1
 

@@ -1,4 +1,4 @@
-From 85bd57a1f3afd796e899a78f25bf75fac0c0c152 Mon Sep 17 00:00:00 2001
+From da98320ab62969e7f97154662f0c7fe4f4b32c7c Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Mon, 19 Mar 2018 12:46:19 +0000
 Subject: [PATCH 5/5] Add ADD_*FLAGS to end of commandlines
@@ -9,7 +9,7 @@ Subject: [PATCH 5/5] Add ADD_*FLAGS to end of commandlines
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index 9ad197ee..7a958c8b 100644
+index 42d3bfe1..a5171da6 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -68,7 +68,7 @@ endif
@@ -33,5 +33,5 @@ index 9ad197ee..7a958c8b 100644
  .PHONY: clean all lint clean_all doxygen rcpplint pypack Rpack Rbuild Rcheck java pylint
  
 -- 
-2.18.0
+2.17.1
 

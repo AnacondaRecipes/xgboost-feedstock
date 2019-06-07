@@ -103,18 +103,14 @@ outputs:
         - {{ compiler('c') }}    # [not win]
         - {{ compiler('cxx') }}  # [not win]
         - llvm-openmp >=4.0.1    # [osx]
-        {% if r_implementation == "mro-base" %}
-        - rtools                 # [win]
-        {% else %}
         - m2w64-toolchain        # [win]
-        {% endif %}
         - git                    # [not win]
         - m2-git                 # [win]
         - make                   # [not win]
         - posix                  # [win]
       host:
         - {{ pin_subpackage('libxgboost', exact=True) }}
-        - {{ r_implementation }}
+        - r-base
         - r-matrix
         - r-data.table
         - r-magrittr
@@ -124,7 +120,7 @@ outputs:
         - {{ pin_subpackage('libxgboost', exact=True) }}
         - {{ pin_subpackage('_r-xgboost-mutex', exact=True) }}
         - llvm-openmp >=4.0.1    # [osx]
-        - {{ r_implementation }}
+        - r-base
         - r-matrix
         - r-data.table
         - r-magrittr
@@ -138,7 +134,7 @@ outputs:
   - name: r-xgboost-cpu
     requirements:
       host:
-        - {{ r_implementation }}
+        - r-base
       run:
-        - {{ r_implementation }}
+        - r-base
         - {{ pin_subpackage('r-xgboost', exact=True) }}

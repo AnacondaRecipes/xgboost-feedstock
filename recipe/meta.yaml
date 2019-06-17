@@ -44,7 +44,7 @@ outputs:
       host:
         - cudatoolkit {{ cudatoolkit }}*
       run:
-        - cudatoolkit {{ cudatoolkit }}*
+        - {{ pin_compatible('cudatoolkit', max_pin='x.x') }}
 
   - name: _py-xgboost-mutex
     version: 1.0
@@ -66,7 +66,7 @@ outputs:
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
         - {{ pin_subpackage('_py-xgboost-mutex', exact=True) }}
-        - cudatoolkit {{ cudatoolkit }}*
+        - {{ pin_compatible('cudatoolkit', max_pin='x.x') }}
         - python
         - numpy
         - scipy

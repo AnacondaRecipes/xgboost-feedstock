@@ -11,6 +11,6 @@
 # fortran_compiler:
 #   - gfortran-dbg               # [linux]
 python:
-  - 2.7
+  # py27 not supported in 0.90
   - 3.6
   - 3.7

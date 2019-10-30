@@ -19,6 +19,7 @@ source:
 
 build:
   skip: true  # [win32 or linux32]
+  number: 1
 
 requirements:
   build:
@@ -67,7 +68,7 @@ outputs:
       host:
         - {{ pin_subpackage('libxgboost', exact=True) }}
         - python
-        - setuptools
+        - pip
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
         - {{ pin_subpackage('_py-xgboost-mutex', exact=True) }}

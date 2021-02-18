@@ -16,6 +16,7 @@ source:
     - 0003-Fix-R-package-mingw-w64-compiler-flags-remove-m64.patch
     - 0004-Fix-configure-check-for-OpenMP-on-macOS.patch
     - 0005-Add-ADD_-FLAGS-to-end-of-commandlines.patch
+    - 0006-Do-not-use-sse-on-s390x.patch                            # [s390x]
 
 build:
   skip: true  # [win32 or linux32]

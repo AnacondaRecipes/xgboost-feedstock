@@ -1,0 +1,13 @@
+diff --git a/make/config.mk b/make/config.mk
+index a2a48f1e..9084f088 100644
+--- a/make/config.mk
++++ b/make/config.mk
+@@ -43,7 +43,7 @@ USE_AZURE = 0
+ # Settings for power and arm arch
+ #----------------------------
+ ARCH := $(shell uname -a)
+-ifneq (,$(filter $(ARCH), armv6l armv7l powerpc64le ppc64le aarch64))
++ifneq (,$(filter $(ARCH), armv6l armv7l powerpc64le ppc64le aarch64 s390x))
+ 	USE_SSE=0
+ else
+ 	USE_SSE=1

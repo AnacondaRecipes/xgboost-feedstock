@@ -91,11 +91,13 @@ outputs:
   - name: _r-xgboost-mutex
     version: 2.0
     build:
+      skip: true  # [s390x]
       string: cpu_0
 
   - name: r-xgboost
     script: install-r-xgboost.sh
     build:
+      skip: true  # [s390x]
       merge_build_host: True  # [win]
       rpaths:
         - lib/R/lib
@@ -133,6 +135,8 @@ outputs:
         - Rscript test-r-xgboost.r
 
   - name: r-xgboost-cpu
+    build:
+      skip: true  # [s390x]
     requirements:
       host:
         - r-base

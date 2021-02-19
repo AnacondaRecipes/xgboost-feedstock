@@ -20,8 +20,8 @@ source:
     - 0007-Fix-build-on-big-endian-CPUs-GitHub-5617.patch           # [s390x]
 
 build:
-  skip: true  # [win32 or linux32]
-  number: 1
+  skip: True  # [win32 or linux32]
+  number: 2
 
 requirements:
   build:
@@ -93,13 +93,13 @@ outputs:
   - name: _r-xgboost-mutex
     version: 2.0
     build:
-      skip: true  # [s390x]
+      skip: True  # [skip_r_bindings]
       string: cpu_0
 
   - name: r-xgboost
     script: install-r-xgboost.sh
     build:
-      skip: true  # [s390x]
+      skip: True  # [skip_r_bindings]
       merge_build_host: True  # [win]
       rpaths:
         - lib/R/lib
@@ -138,7 +138,7 @@ outputs:
 
   - name: r-xgboost-cpu
     build:
-      skip: true  # [s390x]
+      skip: true  # [skip_r_bindings]
     requirements:
       host:
         - r-base

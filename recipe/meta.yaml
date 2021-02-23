@@ -16,10 +16,12 @@ source:
     - 0003-Fix-R-package-mingw-w64-compiler-flags-remove-m64.patch
     - 0004-Fix-configure-check-for-OpenMP-on-macOS.patch
     - 0005-Add-ADD_-FLAGS-to-end-of-commandlines.patch
+    - 0006-Do-not-use-sse-on-s390x.patch                            # [s390x]
+    - 0007-Fix-build-on-big-endian-CPUs-GitHub-5617.patch           # [s390x]
 
 build:
-  skip: true  # [win32 or linux32]
-  number: 1
+  skip: True  # [win32 or linux32]
+  number: 2
 
 requirements:
   build:
@@ -91,11 +93,13 @@ outputs:
   - name: _r-xgboost-mutex
     version: 2.0
     build:
+      skip: True  # [skip_r_bindings]
       string: cpu_0
 
   - name: r-xgboost
     script: install-r-xgboost.sh
     build:
+      skip: True  # [skip_r_bindings]
       merge_build_host: True  # [win]
       rpaths:
         - lib/R/lib
@@ -133,6 +137,8 @@ outputs:
         - Rscript test-r-xgboost.r
 
   - name: r-xgboost-cpu
+    build:
+      skip: true  # [skip_r_bindings]
     requirements:
       host:
         - r-base

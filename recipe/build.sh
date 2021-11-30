@@ -1,31 +1,23 @@
 #!/bin/bash
 
-# http://xgboost.readthedocs.io/en/latest/build.html
+set -exuo pipefail
 
-if [[ ${OSTYPE} == msys ]]; then
-  if [[ "${ARCH}" == "32" ]]; then
-    # SSE2 is used and we get called from MSVC
-    # CPython so 32-bit GCC needs realignment.
-    export CC="gcc -mstackrealign"
-    export CXX="g++ -mstackrealign"
-  fi
-  # cp make/mingw64.mk config.mk
+# ppc64le does not set this in the compiler packages, yet.
+if [[ ${target_platform} == linux-ppc64le ]]; then
+  CMAKE_ARGS="-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER \
+    -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY \
+    -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
+    -DCMAKE_FIND_ROOT_PATH=${PREFIX};${BUILD_PREFIX}/${HOST}/sysroot \
+    -DCMAKE_INSTALL_LIBDIR=lib"
 fi
 
-# XGBoost uses its own compilation flags.
-echo "ADD_LDFLAGS = ${LDFLAGS}" >> config.mk
-echo "ADD_CFLAGS = ${CFLAGS}" >> config.mk
-
-{
-  cmake \
-    -G "Unix Makefiles" \
-    -D CMAKE_BUILD_TYPE:STRING="Release" \
-    -D CMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON \
-    -D CMAKE_INSTALL_PREFIX:PATH="${PREFIX}" \
+mkdir -p build-target
+pushd build-target
+  cmake ${CMAKE_ARGS} \
+    -GNinja \
+    -DCMAKE_BUILD_TYPE:STRING="Release" \
+    -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON \
+    -DCMAKE_INSTALL_PREFIX:PATH="${PREFIX}" \
     "${SRC_DIR}"
-} || {
-  cat $SRC_DIR/CMakeFiles/CMakeOutput.log
-  cat $SRC_DIR/CMakeFiles/CMakeError.log
-  exit 1
-}
-make -j${CPU_COUNT}
+  ninja
+popd

@@ -7,4 +7,4 @@ cudatoolkit:
 r_implementation:
   - r-base
   - mro-base  # [not osx and not linux32 and not win32]
-skip_r_bindings: True   # [s390x or ppc64le or aarch64 or (osx and arm64) or win]
+skip_r_bindings: True   # [s390x or ppc64le or aarch64 or osx or win]

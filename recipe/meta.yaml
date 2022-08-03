@@ -23,7 +23,7 @@ source:
     # - 0001-Force-endian-flag-in-cross-compilation-mode.patch  # [osx and arm64]
 
 build:
-  number: 1
+  number: 2
 
 requirements:
   build:
@@ -60,9 +60,7 @@ outputs:
         - llvm-openmp  # [osx]
       run:
         - llvm-openmp  # [osx]
-        # Using selector until packages for other platforms are (re)built using
-        # newer "defaults" toolchains that use the `_openmp_mutex` mechanism.
-        - _openmp_mutex  # [linux and (not ppc64le)]
+        - _openmp_mutex  # [linux]
 
   - name: _py-xgboost-mutex
     version: 2.0
@@ -150,13 +148,6 @@ outputs:
         - posix                  # [win]
         - cmake
         - ninja
-        # - cross-r-base {{ r_base }}  # [build_platform != target_platform]
-        # - r-base                     # [build_platform != target_platform]
-        # - r-matrix                   # [build_platform != target_platform]
-        # - r-data.table               # [build_platform != target_platform]
-        # - r-magrittr                 # [build_platform != target_platform]
-        # - r-jsonlite                 # [build_platform != target_platform]
-        # - r-knitr                    # [build_platform != target_platform]
       host:
         - {{ pin_subpackage('libxgboost', exact=True) }}
         - r-base
@@ -175,9 +166,7 @@ outputs:
         - r-data.table
         - r-magrittr
         - r-jsonlite
-        # Using selector until packages for other platforms are (re)built using
-        # newer "defaults" toolchains that use the `_openmp_mutex` mechanism.
-        - _openmp_mutex  # [linux and (not ppc64le)]
+        - _openmp_mutex  # [linux]
     test:
       files:
         - test-r-xgboost.r

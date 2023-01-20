@@ -42,8 +42,8 @@ requirements:
 
 outputs:
   - name: libxgboost
-    script: install-libxgboost.sh  # [not win]
-    script: install-win-wrapper.bat  # [win]
+    script: install-libxgboost.sh  # [unix]
+    script: install-win-wrapper.bat  # [not unix]
     build:
       activate_in_script: True
       missing_dso_whitelist:

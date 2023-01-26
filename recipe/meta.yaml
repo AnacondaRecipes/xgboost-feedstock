@@ -75,6 +75,8 @@ outputs:
     script: install-py-xgboost.sh  # [not win]
     script: install-win-wrapper.bat  # [win]
     requirements:
+      build:
+        - m2-base  # [win]
       host:
         - {{ pin_subpackage('libxgboost', exact=True) }}
         - python

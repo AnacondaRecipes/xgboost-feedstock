@@ -83,6 +83,7 @@ outputs:
         - python
         - setuptools
         - pip
+        - wheel
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
         - {{ pin_subpackage('_py-xgboost-mutex', exact=True) }}
@@ -91,9 +92,13 @@ outputs:
         - scipy
         - scikit-learn
     test:
+      requires:
+        - pip
       script: test-py-xgboost.py        # [not s390x]
       imports:
         - xgboost
+      commands:
+        - pip check
 
   - name: py-xgboost-cpu
     requirements:

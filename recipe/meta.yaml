@@ -186,6 +186,7 @@ outputs:
 about:
   home: https://github.com/dmlc/xgboost
   license: Apache-2.0
+  license_family: Apache
   license_file: LICENSE
   summary: |
     Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library, for

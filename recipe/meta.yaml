@@ -90,7 +90,6 @@ outputs:
         - numpy
         - scipy
         - scikit-learn
-        - setuptools
     test:
       script: test-py-xgboost.py        # [not s390x]
       imports:

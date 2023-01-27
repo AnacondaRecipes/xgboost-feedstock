@@ -1,5 +1,5 @@
 {% set name = "xgboost" %}
-{% set version = "1.5.0" %}
+{% set version = "1.5.1" %}
 
 package:
   name: {{ name|lower }}-split
@@ -23,7 +23,8 @@ source:
     # - 0001-Force-endian-flag-in-cross-compilation-mode.patch  # [osx and arm64]
 
 build:
-  number: 2
+  skip: True  # [py<36]
+  number: 0
 
 requirements:
   build:
@@ -76,12 +77,13 @@ outputs:
     script: install-win-wrapper.bat  # [win]
     requirements:
       build:
-        - python                                 # [build_platform != target_platform]
+        - m2-base  # [win]
       host:
         - {{ pin_subpackage('libxgboost', exact=True) }}
         - python
         - setuptools
         - pip
+        - wheel
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
         - {{ pin_subpackage('_py-xgboost-mutex', exact=True) }}
@@ -89,11 +91,14 @@ outputs:
         - numpy
         - scipy
         - scikit-learn
-        - setuptools
     test:
+      requires:
+        - pip
       script: test-py-xgboost.py        # [not s390x]
       imports:
         - xgboost
+      commands:
+        - pip check
 
   - name: py-xgboost-cpu
     requirements:
@@ -186,6 +191,7 @@ outputs:
 about:
   home: https://github.com/dmlc/xgboost
   license: Apache-2.0
+  license_family: Apache
   license_file: LICENSE
   summary: |
     Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library, for

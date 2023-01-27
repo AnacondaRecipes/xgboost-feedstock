@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. activate "${PREFIX}"
+
 if [[ ${OSTYPE} == msys ]]; then
   if [[ ${r_implementation} == mro-base ]]; then
     PREFIX=$(cygpath -u ${PREFIX})

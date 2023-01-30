@@ -19,7 +19,7 @@ source:
     - 0001-conda-Unbundle-libxgboost.-dll-dylib-so-WINDOWS.patch    # [win]
 
 build:
-  skip: True  # [py<36]
+  skip: True  # [py<38]
   number: 0
 
 requirements:

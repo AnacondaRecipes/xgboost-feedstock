@@ -139,8 +139,6 @@ outputs:
         - lib/R/lib
       missing_dso_whitelist:                 # [win]
         - $RPATH/R.dll                       # [win]
-      ignore_run_exports:  # [osx]
-        - llvm-openmp  # [osx]
     requirements:
       build:
         - {{ compiler('m2w64_c') }}          # [win]

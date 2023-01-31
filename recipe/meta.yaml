@@ -45,6 +45,7 @@ outputs:
       activate_in_script: True
       missing_dso_whitelist:
         - $RPATH/ld64.so.1  # [s390x]
+        - $RPATH/libgomp.so.1  # [linux and x86]
     requirements:
       build:
         - {{ compiler('c') }}

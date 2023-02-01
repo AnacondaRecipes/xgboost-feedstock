@@ -49,7 +49,7 @@ outputs:
       missing_dso_whitelist:
         - $RPATH/ld64.so.1  # [s390x]
         - $RPATH/libgomp.so.1  # [linux]
-        - libc++.1.dylib  # [osx]
+        - /usr/lib/libc++.1.dylib  # [osx]
     requirements:
       build:
         - {{ compiler('c') }}

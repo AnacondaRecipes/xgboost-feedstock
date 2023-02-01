@@ -74,6 +74,8 @@ outputs:
     script: install-win-wrapper.bat  # [win]
     requirements:
       build:
+        # m2-base is only included to get around builder environment issues.
+        # This will currently only pass when RDPing into a Windows dev instance.
         - m2-base  # [win]
       host:
         - {{ pin_subpackage('libxgboost', exact=True) }}

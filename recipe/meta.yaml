@@ -146,6 +146,8 @@ outputs:
       missing_dso_whitelist:  # [win or osx]
         - $RPATH/R.dll                       # [win]
         - /usr/lib/libc++.1.dylib            # [osx]
+        - lib/libgcc_s.so.1   # [linux]
+        - lib/libstdc++.so.6  # [linux]
     requirements:
       build:
         - {{ compiler('m2w64_c') }}          # [win]

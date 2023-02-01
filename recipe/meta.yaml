@@ -145,6 +145,7 @@ outputs:
         - libstdcxx-ng  # [linux]
       missing_dso_whitelist:                 # [win]
         - $RPATH/R.dll                       # [win]
+        - /usr/lib/libc++.1.dylib            # [osx]
     requirements:
       build:
         - {{ compiler('m2w64_c') }}          # [win]

@@ -143,7 +143,7 @@ outputs:
       ignore_run_exports:
         - libgcc-ng  # [linux]
         - libstdcxx-ng  # [linux]
-      missing_dso_whitelist:  # [win or osx]
+      missing_dso_whitelist:  # [win or osx or linux]
         - $RPATH/R.dll                       # [win]
         - /usr/lib/libc++.1.dylib            # [osx]
         - lib/libgcc_s.so.1   # [linux]

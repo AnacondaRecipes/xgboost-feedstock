@@ -46,7 +46,7 @@ outputs:
       ignore_run_exports:
         - libgcc-ng  # [linux]
         - libstdcxx-ng  # [linux]
-      missing_dso_whitelist:
+      missing_dso_whitelist:  # [s390x or linux or osx]
         - $RPATH/ld64.so.1  # [s390x]
         - $RPATH/libgomp.so.1  # [linux]
         - /usr/lib/libc++.1.dylib  # [osx]
@@ -143,7 +143,7 @@ outputs:
       ignore_run_exports:
         - libgcc-ng  # [linux]
         - libstdcxx-ng  # [linux]
-      missing_dso_whitelist:                 # [win]
+      missing_dso_whitelist:  # [win or osx]
         - $RPATH/R.dll                       # [win]
         - /usr/lib/libc++.1.dylib            # [osx]
     requirements:

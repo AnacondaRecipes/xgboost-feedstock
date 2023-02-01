@@ -140,6 +140,9 @@ outputs:
       skip: true  # [skip_r_bindings]
       rpaths:
         - lib/R/lib
+      ignore_run_exports:
+        - libgcc-ng  # [linux]
+        - libstdcxx-ng  # [linux]
       missing_dso_whitelist:                 # [win]
         - $RPATH/R.dll                       # [win]
     requirements:

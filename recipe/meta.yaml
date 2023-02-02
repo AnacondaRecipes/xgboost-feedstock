@@ -42,6 +42,7 @@ outputs:
     script: install-libxgboost.sh  # [not win]
     script: install-win-wrapper.bat  # [win]
     build:
+      skip: True  # [py<38]
       activate_in_script: True
       ignore_run_exports:
         - libgcc-ng  # [linux]
@@ -67,6 +68,7 @@ outputs:
   - name: _py-xgboost-mutex
     version: 2.0
     build:
+      skip: True  # [py<38]
       string: cpu_0
       number: 0
     test:
@@ -76,6 +78,8 @@ outputs:
   - name: py-xgboost
     script: install-py-xgboost.sh  # [not win]
     script: install-win-wrapper.bat  # [win]
+    build:
+      skip: True  # [py<38]
     requirements:
       build:
         # m2-base is only included to get around builder environment issues.
@@ -104,6 +108,8 @@ outputs:
         - pip check
 
   - name: py-xgboost-cpu
+    build:
+      skip: True  # [py<38]
     requirements:
       host:
         - python
@@ -113,6 +119,8 @@ outputs:
         - {{ pin_subpackage('py-xgboost', exact=True) }}
 
   - name: xgboost
+    build:
+      skip: True  # [py<38]
     requirements:
       host:
         - python
@@ -128,7 +136,7 @@ outputs:
     build:
       string: cpu_0
       number: 0
-      skip: true  # [skip_r_bindings]
+      skip: True  # [py<38 or skip_r_bindings]
     test:
       commands:
         - echo "Hello R boost!"
@@ -137,7 +145,7 @@ outputs:
     script: install-r-xgboost.sh  # [not win]
     script: install-r-xgboost.bat  # [win]
     build:
-      skip: true  # [skip_r_bindings]
+      skip: True  # [py<38 or skip_r_bindings]
       rpaths:
         - lib/R/lib
       ignore_run_exports:
@@ -187,7 +195,7 @@ outputs:
 
   - name: r-xgboost-cpu
     build:
-      skip: true  # [skip_r_bindings]
+      skip: True  # [py<38 or skip_r_bindings]
     requirements:
       host:
         - r-base

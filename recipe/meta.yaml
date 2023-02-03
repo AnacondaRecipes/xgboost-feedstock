@@ -36,6 +36,10 @@ requirements:
     - ninja
   host:
     - llvm-openmp  # [osx]
+    - python
+    - setuptools
+    - pip
+    - wheel
 
 outputs:
   - name: libxgboost

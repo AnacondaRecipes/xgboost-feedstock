@@ -1,5 +1,5 @@
 {% set name = "xgboost" %}
-{% set version = "1.5.1" %}
+{% set version = "1.7.3" %}
 
 package:
   name: {{ name|lower }}-split
@@ -11,19 +11,15 @@ source:
   git_url: https://github.com/dmlc/xgboost
   git_tag: v{{ version }}
   patches:
-    # xgboost patches
     - 0001-conda-Unbundle-libxgboost.-dll-dylib-so.patch            # [not win]
-    - 0002-Fix-R-package-PKGROOT.patch                              # [not win]
     # Since the code is cloned from git, the line endings differ between unix and windows.
     # Perhaps if git's autocrlf=false on the systems, one single patch would work.
     # Not relying on that, this was the easiest way found to allow the patches to work on
     # their respective platforms. Open to more thoughts.
     - 0001-conda-Unbundle-libxgboost.-dll-dylib-so-WINDOWS.patch    # [win]
-    - 0002-Fix-R-package-PKGROOT-WINDOWS.patch                      # [win]
-    # - 0001-Force-endian-flag-in-cross-compilation-mode.patch  # [osx and arm64]
 
 build:
-  skip: True  # [py<36]
+  skip: True  # [py<38]
   number: 0
 
 requirements:
@@ -40,15 +36,25 @@ requirements:
     - ninja
   host:
     - llvm-openmp  # [osx]
+    - python
+    - setuptools
+    - pip
+    - wheel
 
 outputs:
   - name: libxgboost
     script: install-libxgboost.sh  # [not win]
     script: install-win-wrapper.bat  # [win]
     build:
+      skip: True  # [py<38]
       activate_in_script: True
+      ignore_run_exports:
+        - libgcc-ng  # [linux]
+        - libstdcxx-ng  # [linux]
       missing_dso_whitelist:
         - $RPATH/ld64.so.1  # [s390x]
+        - $RPATH/libgomp.so.1  # [linux]
+        - /usr/lib/libc++.1.dylib  # [osx]
     requirements:
       build:
         - {{ compiler('c') }}
@@ -66,6 +72,7 @@ outputs:
   - name: _py-xgboost-mutex
     version: 2.0
     build:
+      skip: True  # [py<38]
       string: cpu_0
       number: 0
     test:
@@ -75,8 +82,12 @@ outputs:
   - name: py-xgboost
     script: install-py-xgboost.sh  # [not win]
     script: install-win-wrapper.bat  # [win]
+    build:
+      skip: True  # [py<38]
     requirements:
       build:
+        # m2-base is only included to get around builder environment issues.
+        # This will currently only pass when RDPing into a Windows dev instance.
         - m2-base  # [win]
       host:
         - {{ pin_subpackage('libxgboost', exact=True) }}
@@ -101,6 +112,8 @@ outputs:
         - pip check
 
   - name: py-xgboost-cpu
+    build:
+      skip: True  # [py<38]
     requirements:
       host:
         - python
@@ -110,6 +123,8 @@ outputs:
         - {{ pin_subpackage('py-xgboost', exact=True) }}
 
   - name: xgboost
+    build:
+      skip: True  # [py<38]
     requirements:
       host:
         - python
@@ -125,7 +140,7 @@ outputs:
     build:
       string: cpu_0
       number: 0
-      skip: true  # [skip_r_bindings]
+      skip: True  # [py<38 or skip_r_bindings]
     test:
       commands:
         - echo "Hello R boost!"
@@ -134,11 +149,17 @@ outputs:
     script: install-r-xgboost.sh  # [not win]
     script: install-r-xgboost.bat  # [win]
     build:
-      skip: true  # [skip_r_bindings]
+      skip: True  # [py<38 or skip_r_bindings]
       rpaths:
         - lib/R/lib
-      missing_dso_whitelist:                 # [win]
+      ignore_run_exports:
+        - libgcc-ng  # [linux]
+        - libstdcxx-ng  # [linux]
+      missing_dso_whitelist:
         - $RPATH/R.dll                       # [win]
+        - /usr/lib/libc++.1.dylib            # [osx]
+        - lib/libgcc_s.so.1   # [linux]
+        - lib/libstdc++.so.6  # [linux]
     requirements:
       build:
         - {{ compiler('m2w64_c') }}          # [win]
@@ -178,7 +199,7 @@ outputs:
 
   - name: r-xgboost-cpu
     build:
-      skip: true  # [skip_r_bindings]
+      skip: True  # [py<38 or skip_r_bindings]
     requirements:
       host:
         - r-base

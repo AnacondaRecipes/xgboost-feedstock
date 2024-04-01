@@ -1,5 +1,5 @@
 {% set name = "xgboost" %}
-{% set version = "1.7.3" %}
+{% set version = "1.7.6" %}
 
 package:
   name: {{ name|lower }}-split
@@ -102,6 +102,7 @@ outputs:
         - numpy
         - scipy
         - scikit-learn
+
     test:
       requires:
         - pip

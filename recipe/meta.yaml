@@ -21,6 +21,8 @@ source:
 build:
   skip: True  # [py<38]
   number: 0
+  ignore_run_exports:
+    - libxgboost
 
 requirements:
   build:

@@ -10,5 +10,5 @@ pushd build-target
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON \
     -DCMAKE_INSTALL_PREFIX:PATH="${PREFIX}" \
     "${SRC_DIR}"
-  ninja
+  cmake --build . --target install --config Release
 popd

@@ -1,5 +1,0 @@
-r_implementation:
-  - r-base
-  - mro-base  # [not osx and not linux32 and not win32]
-# r-xgboost is there: https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
-skip_r_bindings: True

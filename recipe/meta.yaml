@@ -1,6 +1,8 @@
 {% set name = "xgboost" %}
 {% set version = "1.7.6" %}
 
+# note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
+
 package:
   name: {{ name|lower }}-split
   version: {{ version }}
@@ -103,78 +105,6 @@ outputs:
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
-
-  - name: _r-xgboost-mutex
-    version: 2.0
-    build:
-      string: cpu_0
-      number: 0
-      skip: True  # [py<38 or skip_r_bindings]
-    test:
-      commands:
-        - echo "Hello R boost!"
-
-  - name: r-xgboost
-    script: install-r-xgboost.sh  # [not win]
-    script: install-r-xgboost.bat  # [win]
-    build:
-      skip: True  # [py<38 or skip_r_bindings]
-      rpaths:
-        - lib/R/lib
-      ignore_run_exports:
-        - libgcc-ng  # [linux]
-        - libstdcxx-ng  # [linux]
-      missing_dso_whitelist:
-        - $RPATH/R.dll                       # [win]
-        - /usr/lib/libc++.1.dylib            # [osx]
-        - lib/libgcc_s.so.1   # [linux]
-        - lib/libstdc++.so.6  # [linux]
-    requirements:
-      build:
-        - {{ compiler('m2w64_c') }}          # [win]
-        - {{ compiler('m2w64_cxx') }}        # [win]
-        - {{ compiler('c') }}
-        - {{ compiler('cxx') }}
-        - llvm-openmp            # [osx]
-        - git
-        - make                   # [not win]
-        - posix                  # [win]
-        - cmake
-        - ninja
-      host:
-        - {{ pin_subpackage('libxgboost', exact=True) }}
-        - r-base
-        - llvm-openmp  # [osx]
-        - r-matrix
-        - r-data.table
-        - r-magrittr
-        - r-jsonlite
-        - r-knitr
-      run:
-        - {{ pin_subpackage('libxgboost', exact=True) }}
-        - {{ pin_subpackage('_r-xgboost-mutex', exact=True) }}
-        - llvm-openmp  # [osx]
-        - r-base
-        - r-matrix
-        - r-data.table
-        - r-magrittr
-        - r-jsonlite
-        - _openmp_mutex  # [linux]
-    test:
-      files:
-        - test-r-xgboost.r
-      commands:
-        - Rscript test-r-xgboost.r
-
-  - name: r-xgboost-cpu
-    build:
-      skip: True  # [py<38 or skip_r_bindings]
-    requirements:
-      host:
-        - r-base
-      run:
-        - r-base
-        - {{ pin_subpackage('r-xgboost', exact=True) }}
 
 about:
   home: https://github.com/dmlc/xgboost

@@ -1,14 +1,30 @@
+diff --git a/python-package/setup.py b/python-package/setup.py
+index 8a1b1b709..d60b580d7 100644
+--- a/python-package/setup.py
++++ b/python-package/setup.py
+@@ -340,12 +340,9 @@ if __name__ == '__main__':
+               'numpy',
+               'scipy',
+           ],
+-          ext_modules=[CMakeExtension('libxgboost')],
+           # error: expected "str": "Type[Command]"
+           cmdclass={
+-              'build_ext': BuildExt,     # type: ignore
+               'sdist': Sdist,            # type: ignore
+-              'install_lib': InstallLib,  # type: ignore
+               'install': Install          # type: ignore
+           },
+           extras_require={
 diff --git a/python-package/xgboost/libpath.py b/python-package/xgboost/libpath.py
-index f7a7d9cd..70d73626 100644
+index 1ae77556e..f0466c4d2 100644
 --- a/python-package/xgboost/libpath.py
 +++ b/python-package/xgboost/libpath.py
-@@ -29,7 +29,10 @@ def find_lib_path() -> List[str]:
-         # option.
+@@ -30,6 +30,10 @@ def find_lib_path() -> List[str]:
          os.path.join(sys.prefix, 'lib'),
      ]
--
+ 
 +    if sys.platform == 'win32':
-+        dll_path = [os.path.join(sys.prefix, 'Library', 'mingw-w64', 'bin')]
++        dll_path = [os.path.join(sys.prefix, 'Library', 'bin')]
 +    else:
 +        dll_path = [os.path.join(sys.prefix, 'lib')]
      if sys.platform == 'win32':

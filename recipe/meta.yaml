@@ -1,22 +1,17 @@
 {% set name = "xgboost" %}
-{% set version = "1.7.3" %}
+{% set version = "1.7.6" %}
+
+# note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
 
 package:
   name: {{ name|lower }}-split
   version: {{ version }}
 
 source:
-  # we have to use git urls here to get the submodules needed for the
-  # build - the archive does not have these.
-  git_url: https://github.com/dmlc/xgboost
-  git_tag: v{{ version }}
+  url: https://github.com/dmlc/xgboost/releases/download/v1.7.6/xgboost.tar.gz
+  sha256: 0a54300dd274b98b7f039acffa006bec4875dace041fd9288422306fe7c379ca
   patches:
-    - 0001-conda-Unbundle-libxgboost.-dll-dylib-so.patch            # [not win]
-    # Since the code is cloned from git, the line endings differ between unix and windows.
-    # Perhaps if git's autocrlf=false on the systems, one single patch would work.
-    # Not relying on that, this was the easiest way found to allow the patches to work on
-    # their respective platforms. Open to more thoughts.
-    - 0001-conda-Unbundle-libxgboost.-dll-dylib-so-WINDOWS.patch    # [win]
+    - 0001-conda-Unbundle-libxgboost.-dll-dylib-so.patch
 
 build:
   skip: True  # [py<38]
@@ -24,50 +19,33 @@ build:
 
 requirements:
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - git                    # [not win]
-    - m2-git                 # [win]
     - patch                  # [not win]
     - m2-patch               # [win]
-    - cmake
-    - make  # [not win]
-    - llvm-openmp  # [osx]
-    - ninja
-  host:
-    - llvm-openmp  # [osx]
-    - python
-    - setuptools
-    - pip
-    - wheel
 
 outputs:
   - name: libxgboost
-    script: install-libxgboost.sh  # [not win]
-    script: install-win-wrapper.bat  # [win]
+    script: build-libxgboost.sh  # [not win]
+    script: build-libxgboost.bat  # [win]
     build:
       skip: True  # [py<38]
-      activate_in_script: True
-      ignore_run_exports:
-        - libgcc-ng  # [linux]
-        - libstdcxx-ng  # [linux]
       missing_dso_whitelist:
         - $RPATH/ld64.so.1  # [s390x]
-        - $RPATH/libgomp.so.1  # [linux]
-        - /usr/lib/libc++.1.dylib  # [osx]
     requirements:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - git
         - cmake
-        - make         # [not win]
+        - ninja
         - llvm-openmp  # [osx]
       host:
         - llvm-openmp  # [osx]
       run:
         - llvm-openmp  # [osx]
         - _openmp_mutex  # [linux]
+    test:
+      commands:
+        - test -f ${PREFIX}/lib/libxgboost${SHLIB_EXT}       # [unix]
+        - if not exist %LIBRARY_BIN%\\xgboost.dll exit 1     # [win]
 
   - name: _py-xgboost-mutex
     version: 2.0
@@ -80,17 +58,12 @@ outputs:
         - echo "Hello py boost!"
 
   - name: py-xgboost
-    script: install-py-xgboost.sh  # [not win]
-    script: install-win-wrapper.bat  # [win]
+    script: build-py-xgboost.sh  # [not win]
+    script: build-py-xgboost.bat  # [win]
     build:
       skip: True  # [py<38]
     requirements:
-      build:
-        # m2-base is only included to get around builder environment issues.
-        # This will currently only pass when RDPing into a Windows dev instance.
-        - m2-base  # [win]
       host:
-        - {{ pin_subpackage('libxgboost', exact=True) }}
         - python
         - setuptools
         - pip
@@ -102,6 +75,8 @@ outputs:
         - numpy
         - scipy
         - scikit-learn
+          # mkl variant pulls in intel-openmp which conflicts with llvm-openmp. i.e. force to use openblas variant of numpy, scipy, etc.
+        - blas=*=openblas  # [osx and x86_64]
     test:
       requires:
         - pip
@@ -117,7 +92,6 @@ outputs:
     requirements:
       host:
         - python
-        - {{ pin_subpackage('py-xgboost', exact=True) }}
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
@@ -128,84 +102,9 @@ outputs:
     requirements:
       host:
         - python
-        # we install llvm-opnemp here to convince conda to
-        # install llvm-openmp in the top-level host env above
-        - llvm-openmp  # [osx]
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
-
-  - name: _r-xgboost-mutex
-    version: 2.0
-    build:
-      string: cpu_0
-      number: 0
-      skip: True  # [py<38 or skip_r_bindings]
-    test:
-      commands:
-        - echo "Hello R boost!"
-
-  - name: r-xgboost
-    script: install-r-xgboost.sh  # [not win]
-    script: install-r-xgboost.bat  # [win]
-    build:
-      skip: True  # [py<38 or skip_r_bindings]
-      rpaths:
-        - lib/R/lib
-      ignore_run_exports:
-        - libgcc-ng  # [linux]
-        - libstdcxx-ng  # [linux]
-      missing_dso_whitelist:
-        - $RPATH/R.dll                       # [win]
-        - /usr/lib/libc++.1.dylib            # [osx]
-        - lib/libgcc_s.so.1   # [linux]
-        - lib/libstdc++.so.6  # [linux]
-    requirements:
-      build:
-        - {{ compiler('m2w64_c') }}          # [win]
-        - {{ compiler('m2w64_cxx') }}        # [win]
-        - {{ compiler('c') }}
-        - {{ compiler('cxx') }}
-        - llvm-openmp            # [osx]
-        - git
-        - make                   # [not win]
-        - posix                  # [win]
-        - cmake
-        - ninja
-      host:
-        - {{ pin_subpackage('libxgboost', exact=True) }}
-        - r-base
-        - llvm-openmp  # [osx]
-        - r-matrix
-        - r-data.table
-        - r-magrittr
-        - r-jsonlite
-        - r-knitr
-      run:
-        - {{ pin_subpackage('libxgboost', exact=True) }}
-        - {{ pin_subpackage('_r-xgboost-mutex', exact=True) }}
-        - llvm-openmp  # [osx]
-        - r-base
-        - r-matrix
-        - r-data.table
-        - r-magrittr
-        - r-jsonlite
-        - _openmp_mutex  # [linux]
-    test:
-      files:
-        - test-r-xgboost.r
-      commands:
-        - Rscript test-r-xgboost.r
-
-  - name: r-xgboost-cpu
-    build:
-      skip: True  # [py<38 or skip_r_bindings]
-    requirements:
-      host:
-        - r-base
-      run:
-        - r-base
-        - {{ pin_subpackage('r-xgboost', exact=True) }}
 
 about:
   home: https://github.com/dmlc/xgboost

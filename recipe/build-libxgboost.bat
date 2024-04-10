@@ -1,12 +1,13 @@
 @echo on
-mkdir "%SRC_DIR%"\build-r
-pushd "%SRC_DIR%"\build-r
+
+mkdir "%SRC_DIR%"\build
+pushd "%SRC_DIR%"\build
 
 cmake -G "Ninja" ^
     -DCMAKE_BUILD_TYPE:STRING="Release" ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" ^
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON ^
-    -DR_LIB=ON ^
+    -DR_LIB=OFF ^
     "%SRC_DIR%"
 if errorlevel 1 exit 1
 

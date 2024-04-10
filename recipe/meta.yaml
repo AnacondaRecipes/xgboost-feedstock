@@ -24,8 +24,8 @@ requirements:
 
 outputs:
   - name: libxgboost
-    script: install-libxgboost.sh  # [not win]
-    script: install-libxgboost.bat  # [win]
+    script: build-libxgboost.sh  # [not win]
+    script: build-libxgboost.bat  # [win]
     build:
       skip: True  # [py<38]
       missing_dso_whitelist:
@@ -58,8 +58,8 @@ outputs:
         - echo "Hello py boost!"
 
   - name: py-xgboost
-    script: install-py-xgboost.sh  # [not win]
-    script: install-py-xgboost.bat  # [win]
+    script: build-py-xgboost.sh  # [not win]
+    script: build-py-xgboost.bat  # [win]
     build:
       skip: True  # [py<38]
     requirements:

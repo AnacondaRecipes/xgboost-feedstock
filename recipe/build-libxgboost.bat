@@ -8,7 +8,7 @@ cmake -G "Ninja" ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" ^
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON ^
     -DR_LIB=OFF ^
-    "%SRC_DIR%"
+    "%SRC_DIR%\cpp_src\"
 if errorlevel 1 exit 1
 
 cmake --build . --target install --config Release

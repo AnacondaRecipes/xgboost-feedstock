@@ -9,6 +9,6 @@ pushd build-target
     -DCMAKE_BUILD_TYPE:STRING="Release" \
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON \
     -DCMAKE_INSTALL_PREFIX:PATH="${PREFIX}" \
-    "${SRC_DIR}"
+    "${SRC_DIR}/cpp_src/"
   cmake --build . --target install --config Release
 popd

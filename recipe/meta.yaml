@@ -35,6 +35,7 @@ outputs:
       run:
         - llvm-openmp  # [osx]
         - _openmp_mutex  # [linux]
+        - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
     test:
       commands:
         - test -f ${PREFIX}/lib/libxgboost${SHLIB_EXT}       # [unix]

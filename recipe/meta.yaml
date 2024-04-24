@@ -28,7 +28,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - cmake
-        - ninja
+        - ninja-base
         - llvm-openmp  # [osx]
       host:
         - llvm-openmp  # [osx]

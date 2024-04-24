@@ -1,0 +1,12 @@
+c_compiler:                    # [win]
+  - vs2019                     # [win]
+cxx_compiler:                  # [win]
+  - vs2019                     # [win]
+
+# error: 'u8path<std::string>' is unavailable: introduced in macOS 10.15   
+macos_min_version:             # [osx and x86_64]   
+  - 10.15                      # [osx and x86_64]
+MACOSX_DEPLOYMENT_TARGET:      # [osx and x86_64]   
+  - 10.15                      # [osx and x86_64]                                                                                                                         
+CONDA_BUILD_SYSROOT:           # [osx and x86_64]
+  - /opt/MacOSX10.15.sdk       # [osx and x86_64]

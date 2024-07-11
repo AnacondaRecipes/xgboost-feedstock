@@ -3,3 +3,5 @@ build_parameters:
   - "--suppress-variables"
   - "--error-overlinking"
   - "--error-overdepending"
+
+upload_without_merge

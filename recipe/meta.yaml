@@ -24,7 +24,7 @@ source:
 
 build:
   skip: True  # [py<36]
-  number: 1
+  number: 2
 
 requirements:
   build:
@@ -66,7 +66,7 @@ outputs:
   - name: _py-xgboost-mutex
     version: 2.0
     build:
-      string: cpu_0
+      string: cpu_2
       number: 1
     test:
       commands:

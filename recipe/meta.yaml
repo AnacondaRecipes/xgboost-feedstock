@@ -67,7 +67,7 @@ outputs:
     version: 2.0
     build:
       string: cpu_2
-      number: 1
+      number: 2
     test:
       commands:
         - echo "Hello py boost!"

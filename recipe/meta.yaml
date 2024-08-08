@@ -10,7 +10,7 @@ package:
 source:
   url: https://github.com/dmlc/xgboost/releases/download/v{{ version }}/xgboost-{{ version }}.tar.gz
   sha256: a47ca87f3345d2a866cd7ec40933564aa2b7250592d0e9bf613951630fc1fa6f
-  patches:                                                    # [(linux and x86_64) or s390x]
+  patches:                                            # [(linux and x86_64) or s390x]
     - patches/0001-remove-dep-nvidia-nccl-cu12.patch  # [(linux and x86_64) or s390x]
 
 build:

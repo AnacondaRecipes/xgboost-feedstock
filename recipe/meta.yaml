@@ -32,6 +32,7 @@ outputs:
         - llvm-openmp  # [osx]
       host:
         - llvm-openmp  # [osx]
+        - nccl         # [linux and x86_64]
       run:
         - llvm-openmp  # [osx]
         - _openmp_mutex  # [linux]
@@ -74,11 +75,16 @@ outputs:
       requires:
         - pip
         - scikit-learn
-      script: test-py-xgboost.py        # [not s390x]
+        - pytest
+        - numpy
+      # script: test-py-xgboost.py        # [not s390x]
       imports:
         - xgboost
+      source_files:
+        - tests/python/test_with_sklearn.py
       commands:
         - pip check
+        - pytest -vv tests/python/test_with_sklearn.py
 
   - name: py-xgboost-cpu
     build:

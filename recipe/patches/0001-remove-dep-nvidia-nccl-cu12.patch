@@ -1,0 +1,28 @@
+From 8a70efc7fe63b0c563291b6c6f485c351ba41b25 Mon Sep 17 00:00:00 2001
+From: Lorenzo Pirritano <lpirritano@anaconda.com>
+Date: Thu, 8 Aug 2024 19:29:05 +0200
+Subject: [PATCH] remove dep nvidia-nccl-cu12
+
+even by renaming the requirement nvidia-nccl-cu12 to nccl
+pip check would fail with:
+"xgboost 2.1.1 requires nccl, which is not installed."
+
+---
+ python-package/pyproject.toml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/python-package/pyproject.toml b/python-package/pyproject.toml
+index 05bbe99..a470bb2 100644
+--- a/python-package/pyproject.toml
++++ b/python-package/pyproject.toml
+@@ -30,7 +30,6 @@ classifiers = [
+ dependencies = [
+     "numpy",
+     "scipy",
+-    "nvidia-nccl-cu12 ; platform_system == 'Linux' and platform_machine != 'aarch64'"
+ ]
+ 
+ [project.urls]
+-- 
+2.39.1
+

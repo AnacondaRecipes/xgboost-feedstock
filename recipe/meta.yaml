@@ -10,6 +10,8 @@ package:
 source:
   url: https://github.com/dmlc/xgboost/releases/download/v{{ version }}/xgboost-{{ version }}.tar.gz
   sha256: a47ca87f3345d2a866cd7ec40933564aa2b7250592d0e9bf613951630fc1fa6f
+  patches:                                                    # [(linux and x86_64) or s390x]
+    - patches/0001-rename-dep-nvidia-nccl-cu12-to-nccl.patch  # [(linux and x86_64) or s390x]
 
 build:
   skip: True  # [py<38]
@@ -57,6 +59,8 @@ outputs:
     build:
       skip: True  # [py<38]
     requirements:
+      build:
+        - patch     # [(linux and x86_64) or s390x]
       host:
         - python
         - pip

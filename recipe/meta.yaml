@@ -75,16 +75,11 @@ outputs:
       requires:
         - pip
         - scikit-learn
-        - pytest
-        - numpy
-      # script: test-py-xgboost.py        # [not s390x]
+      script: test-py-xgboost.py        # [not s390x]
       imports:
         - xgboost
-      source_files:
-        - tests/python/test_with_sklearn.py
       commands:
         - pip check
-        - pytest -vv tests/python/test_with_sklearn.py
 
   - name: py-xgboost-cpu
     build:

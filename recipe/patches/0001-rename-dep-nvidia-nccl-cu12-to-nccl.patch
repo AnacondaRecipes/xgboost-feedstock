@@ -1,0 +1,25 @@
+From 89984f992a7c9ca885b806c1e60a2c988f6b2eba Mon Sep 17 00:00:00 2001
+From: Lorenzo Pirritano <lpirritano@anaconda.com>
+Date: Thu, 8 Aug 2024 16:54:40 +0200
+Subject: [PATCH] rename dep nvidia-nccl-cu12 to nccl
+
+---
+ python-package/pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/python-package/pyproject.toml b/python-package/pyproject.toml
+index 05bbe99..381c05e 100644
+--- a/python-package/pyproject.toml
++++ b/python-package/pyproject.toml
+@@ -30,7 +30,7 @@ classifiers = [
+ dependencies = [
+     "numpy",
+     "scipy",
+-    "nvidia-nccl-cu12 ; platform_system == 'Linux' and platform_machine != 'aarch64'"
++    "nccl ; platform_system == 'Linux' and platform_machine != 'aarch64'"
+ ]
+ 
+ [project.urls]
+-- 
+2.39.1
+

@@ -1,5 +1,5 @@
 {% set name = "xgboost" %}
-{% set version = "2.0.3" %}
+{% set version = "2.1.1" %}
 
 # note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
 
@@ -9,7 +9,7 @@ package:
 
 source:
   url: https://github.com/dmlc/xgboost/releases/download/v{{ version }}/xgboost-{{ version }}.tar.gz
-  sha256: 505955b5d770f8217a049beecce79e04a93787371c06dfb4b2414fec9d496bf3
+  sha256: a47ca87f3345d2a866cd7ec40933564aa2b7250592d0e9bf613951630fc1fa6f
 
 build:
   skip: True  # [py<38]
@@ -104,7 +104,7 @@ about:
   home: https://github.com/dmlc/xgboost
   license: Apache-2.0
   license_family: Apache
-  license_file: cpp_src/LICENSE
+  license_file: LICENSE
   summary: |
     Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library, for
     Python, R, Java, Scala, C++ and more. Runs on single machine, Hadoop, Spark, Flink

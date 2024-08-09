@@ -10,17 +10,16 @@ package:
 source:
   url: https://github.com/dmlc/xgboost/releases/download/v{{ version }}/xgboost-{{ version }}.tar.gz
   sha256: a47ca87f3345d2a866cd7ec40933564aa2b7250592d0e9bf613951630fc1fa6f
-  patches:                                            # [linux and not aarch64]
-    - patches/0001-remove-dep-nvidia-nccl-cu12.patch  # [linux and not aarch64]
+  patches:
+    - patches/0001-remove-dep-nvidia-nccl-cu12.patch
 
 build:
-  # nccl not available for s390x
-  skip: True  # [py<38 or s390x]
+  skip: True  # [py<38]
   number: 0
 
 outputs:
   - name: libxgboost
-    script: build-libxgboost.sh  # [not win]
+    script: build-libxgboost.sh   # [not win]
     script: build-libxgboost.bat  # [win]
     build:
       skip: True  # [py<38]
@@ -55,13 +54,14 @@ outputs:
         - echo "Hello py boost!"
 
   - name: py-xgboost
-    script: build-py-xgboost.sh  # [not win]
+    script: build-py-xgboost.sh   # [not win]
     script: build-py-xgboost.bat  # [win]
     build:
       skip: True  # [py<38]
     requirements:
       build:
-        - patch     # [linux and not aarch64]
+        - patch     # [not win]
+        - m2-patch  # [win]
       host:
         - python
         - pip
@@ -73,7 +73,6 @@ outputs:
         - python
         - numpy
         - scipy
-        - nccl         # [linux and not aarch64]
           # mkl variant pulls in intel-openmp which conflicts with llvm-openmp. i.e. force to use openblas variant of numpy, scipy, etc.
         - blas=*=openblas  # [osx and x86_64]
       run_constrained:

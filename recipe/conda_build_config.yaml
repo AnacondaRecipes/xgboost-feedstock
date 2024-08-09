@@ -1,7 +1,7 @@
 c_compiler:                    # [win]
-  - vs2019                     # [win]
+  - vs2022                     # [win]
 cxx_compiler:                  # [win]
-  - vs2019                     # [win]
+  - vs2022                     # [win]
 
 # error: 'u8path<std::string>' is unavailable: introduced in macOS 10.15   
 macos_min_version:             # [osx and x86_64]   

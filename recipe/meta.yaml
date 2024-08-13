@@ -64,7 +64,7 @@ outputs:
         - m2-patch  # [win]
       host:
         - python
-        - pip
+        - pip <24.2
         - hatchling >=1.12.1
         - {{ pin_subpackage('libxgboost', exact=True) }}
       run:
@@ -79,7 +79,7 @@ outputs:
         - pandas >=1.2
     test:
       requires:
-        - pip
+        - pip <24.2
         - scikit-learn
       script: test-py-xgboost.py        # [not s390x]
       imports:

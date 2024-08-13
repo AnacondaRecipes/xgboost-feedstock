@@ -64,7 +64,7 @@ outputs:
         - m2-patch  # [win]
       host:
         - python
-        - pip <24.2
+        - pip
         - hatchling >=1.12.1
         - {{ pin_subpackage('libxgboost', exact=True) }}
       run:
@@ -74,12 +74,19 @@ outputs:
         - numpy
         - scipy
           # mkl variant pulls in intel-openmp which conflicts with llvm-openmp. i.e. force to use openblas variant of numpy, scipy, etc.
-        - blas=*=openblas  # [osx and x86_64]
+        - blas =*=openblas  # [osx and x86_64]
       run_constrained:
         - pandas >=1.2
     test:
       requires:
-        - pip <24.2
+        # pip 24.2 seems to introduce a check on the tag within the wheel file.
+        # Our WHEEL file has a tag "py3-none-macosx_11_1_arm64" for osx-arm64
+        # but among the platform tags that are checked,
+        # there is no macosx_11_1_arm64 and the pip check fails.
+        # See: https://github.com/pypa/packaging/issues/435
+        # See PR: https://github.com/AnacondaRecipes/xgboost-feedstock/pull/20
+        - pip <24.2  # [osx and arm64]
+        - pip        # [not (osx and arm64)]
         - scikit-learn
       script: test-py-xgboost.py        # [not s390x]
       imports:

@@ -12,6 +12,7 @@ source:
   sha256: a47ca87f3345d2a866cd7ec40933564aa2b7250592d0e9bf613951630fc1fa6f
   patches:
     - patches/0001-remove-dep-nvidia-nccl-cu12.patch
+    - patches/0002-remove-hatch-custom-build-hook.patch
 
 build:
   skip: True  # [py<38]
@@ -79,14 +80,7 @@ outputs:
         - pandas >=1.2
     test:
       requires:
-        # pip 24.2 seems to introduce a check on the tag within the wheel file.
-        # Our WHEEL file has a tag "py3-none-macosx_11_1_arm64" for osx-arm64
-        # but among the platform tags that are checked,
-        # there is no macosx_11_1_arm64 and the pip check fails.
-        # See: https://github.com/pypa/packaging/issues/435
-        # See PR: https://github.com/AnacondaRecipes/xgboost-feedstock/pull/20
-        - pip <24.2  # [osx and arm64]
-        - pip        # [not (osx and arm64)]
+        - pip
         - scikit-learn
       script: test-py-xgboost.py        # [not s390x]
       imports:

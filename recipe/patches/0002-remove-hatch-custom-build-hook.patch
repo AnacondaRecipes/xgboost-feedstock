@@ -1,0 +1,35 @@
+From 97d19ad63a020fe55939b9cdb4d63438ebc44b83 Mon Sep 17 00:00:00 2001
+From: Lorenzo Pirritano <lpirritano@anaconda.com>
+Date: Tue, 13 Aug 2024 18:29:19 +0200
+Subject: [PATCH 2/2] remove hatch custom build hook
+
+pip 24.2 introduces a check on the tag within the wheel file.
+this custom hook creates a tag "py3-none-macosx_11_1_arm64"
+for osx-arm64 but among the platform tags that are checked,
+there is no macosx_11_1_arm64 and the pip check fails.
+
+See: https://github.com/pypa/packaging/issues/435
+See PR: https://github.com/AnacondaRecipes/xgboost-feedstock/pull/20
+
+This patch disables the hatch custom build hook
+
+---
+ python-package/pyproject.toml | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/python-package/pyproject.toml b/python-package/pyproject.toml
+index a470bb2..4ed52a9 100644
+--- a/python-package/pyproject.toml
++++ b/python-package/pyproject.toml
+@@ -44,8 +44,6 @@ datatable = ["datatable"]
+ plotting = ["graphviz", "matplotlib"]
+ pyspark = ["pyspark", "scikit-learn", "cloudpickle"]
+ 
+-[tool.hatch.build.targets.wheel.hooks.custom]
+-
+ [tool.isort]
+ profile = "black"
+ 
+-- 
+2.39.1
+

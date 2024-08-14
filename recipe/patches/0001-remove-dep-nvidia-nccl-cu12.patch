@@ -3,8 +3,12 @@ From: Lorenzo Pirritano <lpirritano@anaconda.com>
 Date: Thu, 8 Aug 2024 19:29:05 +0200
 Subject: [PATCH 1/2] remove dep nvidia-nccl-cu12
 
-remove the requirement nvidia-nccl-cu12 because we
-are not building for CUDA.
+remove the requirement nvidia-nccl-cu12 from the metadata
+since we don't ship that package.
+
+nvidia-nccl-cu12 is specific to the python/PyPI ecosystem
+and doesn't map to anything in our ecosystem, at least not
+in this form.
 
 ---
  python-package/pyproject.toml | 1 -

@@ -1,11 +1,14 @@
 From 8a70efc7fe63b0c563291b6c6f485c351ba41b25 Mon Sep 17 00:00:00 2001
 From: Lorenzo Pirritano <lpirritano@anaconda.com>
 Date: Thu, 8 Aug 2024 19:29:05 +0200
-Subject: [PATCH] remove dep nvidia-nccl-cu12
+Subject: [PATCH 1/2] remove dep nvidia-nccl-cu12
 
-even by renaming the requirement nvidia-nccl-cu12 to nccl
-pip check would fail with:
-"xgboost 2.1.1 requires nccl, which is not installed."
+remove the requirement nvidia-nccl-cu12 from the metadata
+since we don't ship that package.
+
+nvidia-nccl-cu12 is specific to the python/PyPI ecosystem
+and doesn't map to anything in our ecosystem, at least not
+in this form.
 
 ---
  python-package/pyproject.toml | 1 -

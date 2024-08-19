@@ -12,6 +12,7 @@ source:
   sha256: a47ca87f3345d2a866cd7ec40933564aa2b7250592d0e9bf613951630fc1fa6f
   patches:
     - patches/0001-remove-dep-nvidia-nccl-cu12.patch
+    - patches/0002-remove-hatch-custom-build-hook.patch
 
 build:
   skip: True  # [py<38]
@@ -74,7 +75,7 @@ outputs:
         - numpy
         - scipy
           # mkl variant pulls in intel-openmp which conflicts with llvm-openmp. i.e. force to use openblas variant of numpy, scipy, etc.
-        - blas=*=openblas  # [osx and x86_64]
+        - blas =*=openblas  # [osx and x86_64]
       run_constrained:
         - pandas >=1.2
     test:

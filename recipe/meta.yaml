@@ -10,10 +10,12 @@ package:
 source:
   url: https://github.com/dmlc/xgboost/releases/download/v{{ version }}/xgboost-{{ version }}.tar.gz
   sha256: 505955b5d770f8217a049beecce79e04a93787371c06dfb4b2414fec9d496bf3
+  patches:
+    - patches/0001-remove-custom-tag.patch
 
 build:
   skip: True  # [py<38]
-  number: 0
+  number: 1
 
 outputs:
   - name: libxgboost

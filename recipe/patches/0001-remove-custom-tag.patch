@@ -1,0 +1,25 @@
+From 7c9a7de09f693bf5ac3acae647c835e15365940b Mon Sep 17 00:00:00 2001
+From: Mohamed Sentissi <msentissi@anaconda.com>
+Date: Wed, 9 Oct 2024 14:29:53 -0400
+Subject: [PATCH] remove custom tag
+
+---
+ pyproject.toml | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 90f127b..d620b0e 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -44,8 +44,6 @@ datatable = ["datatable"]
+ plotting = ["graphviz", "matplotlib"]
+ pyspark = ["pyspark", "scikit-learn", "cloudpickle"]
+ 
+-[tool.hatch.build.targets.wheel.hooks.custom]
+-
+ [tool.isort]
+ profile = "black"
+ 
+-- 
+2.45.2
+

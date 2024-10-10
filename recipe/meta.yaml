@@ -10,10 +10,12 @@ package:
 source:
   url: https://github.com/dmlc/xgboost/releases/download/v{{ version }}/xgboost-{{ version }}.tar.gz
   sha256: 505955b5d770f8217a049beecce79e04a93787371c06dfb4b2414fec9d496bf3
+  patches:
+    - patches/0001-remove-custom-tag.patch
 
 build:
   skip: True  # [py<38]
-  number: 0
+  number: 1
 
 outputs:
   - name: libxgboost
@@ -30,6 +32,8 @@ outputs:
         - cmake
         - ninja-base
         - llvm-openmp  # [osx]
+        - patch               # [not win]
+        - m2-patch            # [win]
       host:
         - llvm-openmp  # [osx]
       run:
@@ -47,6 +51,10 @@ outputs:
       skip: True  # [py<38]
       string: cpu_0
       number: 0
+    requirements:
+      build:
+        - patch               # [not win]
+        - m2-patch            # [win]
     test:
       commands:
         - echo "Hello py boost!"
@@ -57,6 +65,9 @@ outputs:
     build:
       skip: True  # [py<38]
     requirements:
+      build:
+        - patch               # [not win]
+        - m2-patch            # [win]
       host:
         - python
         - pip
@@ -84,6 +95,9 @@ outputs:
     build:
       skip: True  # [py<38]
     requirements:
+      build:
+        - patch               # [not win]
+        - m2-patch            # [win]
       host:
         - python
       run:
@@ -94,6 +108,9 @@ outputs:
     build:
       skip: True  # [py<38]
     requirements:
+      build:
+        - patch               # [not win]
+        - m2-patch            # [win]
       host:
         - python
       run:

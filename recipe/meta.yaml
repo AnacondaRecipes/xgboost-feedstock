@@ -30,11 +30,10 @@ outputs:
         - {{ compiler('cxx') }}
         - cmake
         - ninja-base
-        - llvm-openmp {{ llvm_openmp_version }}  # [osx]
       host:
-        - llvm-openmp {{ llvm_openmp_version }}  # [osx]
+        - llvm-openmp 14.0.6  # [osx]
       run:
-        - llvm-openmp {{ llvm_openmp_version }}  # [osx]
+        - llvm-openmp  # [osx]
         - _openmp_mutex  # [linux]
         - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
     test:

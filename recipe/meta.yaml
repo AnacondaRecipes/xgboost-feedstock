@@ -30,11 +30,11 @@ outputs:
         - {{ compiler('cxx') }}
         - cmake
         - ninja-base
-        - llvm-openmp  # [osx]
+        - llvm-openmp {{ llvm_openmp_version }}  # [osx]
       host:
-        - llvm-openmp  # [osx]
+        - llvm-openmp {{ llvm_openmp_version }}  # [osx]
       run:
-        - llvm-openmp  # [osx]
+        - llvm-openmp {{ llvm_openmp_version }}  # [osx]
         - _openmp_mutex  # [linux]
         - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
     test:
@@ -96,6 +96,14 @@ outputs:
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
+    test:
+      imports:
+        - xgboost
+      commands:
+        - pip check
+      requires:
+        - pip
+      
 
   - name: xgboost
     build:
@@ -106,6 +114,13 @@ outputs:
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
+    test:
+      imports:
+        - xgboost
+      commands:
+        - pip check
+      requires:
+        - pip
 
 about:
   home: https://github.com/dmlc/xgboost
@@ -133,3 +148,9 @@ extra:
     - jakirkham
     - ksangeek
     - xhochy
+  skip-lints:
+    # output "_py-xgboost-mutex": The requirements section is missing.
+    - missing_section
+    # output "py-xgboost": Test commands are not executed when run_test.sh (.bat...) is present.
+    # test-py-xgboost.py is used
+    - has_run_test_and_commands

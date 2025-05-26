@@ -69,7 +69,7 @@ outputs:
         - {{ pin_subpackage('libxgboost', exact=True) }}
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
-        - {{ pin_subpackage('_py-xgboost-mutex', exact=True) }}
+        - _py-xgboost-mutex
         - python
         - numpy
         - scipy
@@ -149,8 +149,6 @@ extra:
     - ksangeek
     - xhochy
   skip-lints:
-    # output "_py-xgboost-mutex": The requirements section is missing.
-    - missing_section
     # output "py-xgboost": Test commands are not executed when run_test.sh (.bat...) is present.
     # test-py-xgboost.py is used
     - has_run_test_and_commands

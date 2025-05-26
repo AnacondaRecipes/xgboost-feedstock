@@ -41,7 +41,7 @@ outputs:
         - test -f ${PREFIX}/lib/libxgboost${SHLIB_EXT}       # [unix]
         - if not exist %LIBRARY_BIN%\\xgboost.dll exit 1     # [win]
 
-  # Already in the main channel. The package build platform failed on release because of this module.
+  # Already in the main channel at this version. Commented out to not override the existing package.
   #- name: _py-xgboost-mutex
   #  version: 2.0
   #  build:
@@ -69,7 +69,7 @@ outputs:
         - {{ pin_subpackage('libxgboost', exact=True) }}
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
-        - _py-xgboost-mutex
+        - _py-xgboost-mutex 2.0
         - python
         - numpy
         - scipy

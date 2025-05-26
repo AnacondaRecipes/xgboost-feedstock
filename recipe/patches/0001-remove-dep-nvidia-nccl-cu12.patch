@@ -1,31 +1,26 @@
-From 8a70efc7fe63b0c563291b6c6f485c351ba41b25 Mon Sep 17 00:00:00 2001
-From: Lorenzo Pirritano <lpirritano@anaconda.com>
-Date: Thu, 8 Aug 2024 19:29:05 +0200
-Subject: [PATCH 1/2] remove dep nvidia-nccl-cu12
-
-remove the requirement nvidia-nccl-cu12 from the metadata
-since we don't ship that package.
-
-nvidia-nccl-cu12 is specific to the python/PyPI ecosystem
-and doesn't map to anything in our ecosystem, at least not
-in this form.
+From 680a5869845ae2503ee629a2dc4b6c6f790b6bc4 Mon Sep 17 00:00:00 2001
+From: Andrii Osipov <aosipov@anaconda.com>
+Date: Fri, 23 May 2025 01:38:31 -0700
+Subject: [PATCH 1/2] remove dep nvidia nccl cu12
 
 ---
- python-package/pyproject.toml | 1 -
- 1 file changed, 1 deletion(-)
+ python-package/pyproject.toml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/python-package/pyproject.toml b/python-package/pyproject.toml
-index 05bbe99..a470bb2 100644
+index 5a3b897..ced6a25 100644
 --- a/python-package/pyproject.toml
 +++ b/python-package/pyproject.toml
-@@ -30,7 +30,6 @@ classifiers = [
+@@ -30,8 +30,7 @@ classifiers = [
+ ]
  dependencies = [
      "numpy",
-     "scipy",
--    "nvidia-nccl-cu12 ; platform_system == 'Linux' and platform_machine != 'aarch64'"
+-    "scipy",
+-    "nvidia-nccl-cu12 ; platform_system == 'Linux' and platform_machine != 'aarch64'",
++    "scipy"
  ]
  
  [project.urls]
 -- 
-2.39.1
+2.39.3 (Apple Git-146)
 

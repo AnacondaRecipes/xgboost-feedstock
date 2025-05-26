@@ -1,5 +1,5 @@
 {% set name = "xgboost" %}
-{% set version = "2.1.1" %}
+{% set version = "2.1.4" %}
 
 # note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
 
@@ -9,7 +9,7 @@ package:
 
 source:
   url: https://github.com/dmlc/xgboost/releases/download/v{{ version }}/xgboost-{{ version }}.tar.gz
-  sha256: a47ca87f3345d2a866cd7ec40933564aa2b7250592d0e9bf613951630fc1fa6f
+  sha256: b6ce5870d03cc1233cad5ff8460f670a2aff78625adfb578c0b9eec3b8b88406
   patches:
     - patches/0001-remove-dep-nvidia-nccl-cu12.patch
     - patches/0002-remove-hatch-custom-build-hook.patch
@@ -24,17 +24,14 @@ outputs:
     script: build-libxgboost.bat  # [win]
     build:
       skip: True  # [py<38]
-      missing_dso_whitelist:
-        - $RPATH/ld64.so.1  # [s390x]
     requirements:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - cmake
         - ninja-base
-        - llvm-openmp  # [osx]
       host:
-        - llvm-openmp  # [osx]
+        - llvm-openmp 14.0.6  # [osx]
       run:
         - llvm-openmp  # [osx]
         - _openmp_mutex  # [linux]
@@ -67,6 +64,7 @@ outputs:
         - python
         - pip
         - hatchling >=1.12.1
+        - packaging >=21.3
         - {{ pin_subpackage('libxgboost', exact=True) }}
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
@@ -82,7 +80,7 @@ outputs:
       requires:
         - pip
         - scikit-learn
-      script: test-py-xgboost.py        # [not s390x]
+      script: test-py-xgboost.py
       imports:
         - xgboost
       commands:
@@ -97,6 +95,14 @@ outputs:
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
+    test:
+      imports:
+        - xgboost
+      commands:
+        - pip check
+      requires:
+        - pip
+      
 
   - name: xgboost
     build:
@@ -107,6 +113,13 @@ outputs:
       run:
         - python
         - {{ pin_subpackage('py-xgboost', exact=True) }}
+    test:
+      imports:
+        - xgboost
+      commands:
+        - pip check
+      requires:
+        - pip
 
 about:
   home: https://github.com/dmlc/xgboost
@@ -134,3 +147,9 @@ extra:
     - jakirkham
     - ksangeek
     - xhochy
+  skip-lints:
+    # output "_py-xgboost-mutex": The requirements section is missing.
+    - missing_section
+    # output "py-xgboost": Test commands are not executed when run_test.sh (.bat...) is present.
+    # test-py-xgboost.py is used
+    - has_run_test_and_commands

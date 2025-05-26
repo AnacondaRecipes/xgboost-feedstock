@@ -41,15 +41,16 @@ outputs:
         - test -f ${PREFIX}/lib/libxgboost${SHLIB_EXT}       # [unix]
         - if not exist %LIBRARY_BIN%\\xgboost.dll exit 1     # [win]
 
-  - name: _py-xgboost-mutex
-    version: 2.0
-    build:
-      skip: True  # [py<38]
-      string: cpu_0
-      number: 0
-    test:
-      commands:
-        - echo "Hello py boost!"
+  # Already in the main channel at this version. Commented out to not override the existing package.
+  #- name: _py-xgboost-mutex
+  #  version: 2.0
+  #  build:
+  #    skip: True  # [py<38]
+  #    string: cpu_0
+  #    number: 0
+  #  test:
+  #    commands:
+  #      - echo "Hello py boost!"
 
   - name: py-xgboost
     script: build-py-xgboost.sh   # [not win]
@@ -68,7 +69,7 @@ outputs:
         - {{ pin_subpackage('libxgboost', exact=True) }}
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
-        - {{ pin_subpackage('_py-xgboost-mutex', exact=True) }}
+        - _py-xgboost-mutex 2.0
         - python
         - numpy
         - scipy
@@ -148,8 +149,6 @@ extra:
     - ksangeek
     - xhochy
   skip-lints:
-    # output "_py-xgboost-mutex": The requirements section is missing.
-    - missing_section
     # output "py-xgboost": Test commands are not executed when run_test.sh (.bat...) is present.
     # test-py-xgboost.py is used
     - has_run_test_and_commands

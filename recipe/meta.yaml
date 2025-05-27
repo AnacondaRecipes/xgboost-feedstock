@@ -103,7 +103,6 @@ outputs:
         - pip check
       requires:
         - pip
-      
 
   - name: xgboost
     build:

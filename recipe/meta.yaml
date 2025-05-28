@@ -15,7 +15,11 @@ source:
     - patches/0002-remove-hatch-custom-build-hook.patch
 
 build:
+  skip: True  # [py<310]
   number: 0
+  requirements:
+    host:
+      - python
 
 outputs:
   - name: libxgboost

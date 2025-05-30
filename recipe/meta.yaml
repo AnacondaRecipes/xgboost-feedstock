@@ -17,9 +17,12 @@ source:
 build:
   skip: True  # [py<310]
   number: 0
-  requirements:
-    host:
-      - python
+
+requirements:
+  host:
+    - python
+  run:
+    - python
 
 outputs:
   - name: libxgboost

@@ -1,5 +1,5 @@
 {% set name = "xgboost" %}
-{% set version = "2.1.4" %}
+{% set version = "3.0.1" %}
 
 # note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
 
@@ -8,22 +8,28 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/dmlc/xgboost/releases/download/v{{ version }}/xgboost-{{ version }}.tar.gz
-  sha256: b6ce5870d03cc1233cad5ff8460f670a2aff78625adfb578c0b9eec3b8b88406
+  url: https://github.com/dmlc/xgboost/releases/download/v{{ version }}/xgboost-src-{{ version }}.tar.gz
+  sha256: 46e6815fd24dec7e17ed6e9327cc062da098387ee36358e3e0a43fc43939a8b1
   patches:
     - patches/0001-remove-dep-nvidia-nccl-cu12.patch
     - patches/0002-remove-hatch-custom-build-hook.patch
 
 build:
-  skip: True  # [py<38]
+  skip: True  # [py<310]
   number: 0
+
+requirements:
+  host:
+    - python
+  run:
+    - python
 
 outputs:
   - name: libxgboost
     script: build-libxgboost.sh   # [not win]
     script: build-libxgboost.bat  # [win]
     build:
-      skip: True  # [py<38]
+      skip: True  # [py<310]
     requirements:
       build:
         - {{ compiler('c') }}
@@ -56,7 +62,7 @@ outputs:
     script: build-py-xgboost.sh   # [not win]
     script: build-py-xgboost.bat  # [win]
     build:
-      skip: True  # [py<38]
+      skip: True  # [py<310]
     requirements:
       build:
         - patch     # [not win]
@@ -89,7 +95,7 @@ outputs:
 
   - name: py-xgboost-cpu
     build:
-      skip: True  # [py<38]
+      skip: True  # [py<310]
     requirements:
       host:
         - python
@@ -106,7 +112,7 @@ outputs:
 
   - name: xgboost
     build:
-      skip: True  # [py<38]
+      skip: True  # [py<310]
     requirements:
       host:
         - python

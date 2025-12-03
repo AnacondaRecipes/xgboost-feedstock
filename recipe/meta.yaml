@@ -1,5 +1,5 @@
 {% set name = "xgboost" %}
-{% set version = "3.0.1" %}
+{% set version = "3.1.2" %}
 
 # note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
 
@@ -8,8 +8,8 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/dmlc/xgboost/releases/download/v{{ version }}/xgboost-src-{{ version }}.tar.gz
-  sha256: 46e6815fd24dec7e17ed6e9327cc062da098387ee36358e3e0a43fc43939a8b1
+  url: https://github.com/dmlc/{{ name }}/releases/download/v{{ version }}/{{ name }}-src-{{ version }}.tar.gz
+  sha256: 12f2d6f735fa71e007c40171fd926c12306276dd299dc48f6c923e4f3891c33e
   patches:
     - patches/0001-remove-dep-nvidia-nccl-cu12.patch
     - patches/0002-remove-hatch-custom-build-hook.patch
@@ -37,11 +37,10 @@ outputs:
         - cmake
         - ninja-base
       host:
-        - llvm-openmp 14.0.6  # [osx]
+        - llvm-openmp 20.1.8 # [osx]
       run:
         - llvm-openmp  # [osx]
         - _openmp_mutex  # [linux]
-        - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
     test:
       commands:
         - test -f ${PREFIX}/lib/libxgboost${SHLIB_EXT}       # [unix]
@@ -64,9 +63,6 @@ outputs:
     build:
       skip: True  # [py<310]
     requirements:
-      build:
-        - patch     # [not win]
-        - m2-patch  # [win]
       host:
         - python
         - pip
@@ -79,19 +75,20 @@ outputs:
         - python
         - numpy
         - scipy
-          # mkl variant pulls in intel-openmp which conflicts with llvm-openmp. i.e. force to use openblas variant of numpy, scipy, etc.
-        - blas =*=openblas  # [osx and x86_64]
       run_constrained:
         - pandas >=1.2
-    test:
-      requires:
-        - pip
-        - scikit-learn
-      script: test-py-xgboost.py
-      imports:
-        - xgboost
-      commands:
-        - pip check
+        - pyspark >=3.4
+
+    # no scikit-learn for 3.14, remove this constraint when 3.14 is released
+    test:                         # [py<314]
+      requires:                   # [py<314]
+        - pip                     # [py<314]
+        - scikit-learn            # [py<314]
+      script: test-py-xgboost.py  # [py<314]
+      imports:                    # [py<314]
+        - xgboost                 # [py<314]
+      commands:                   # [py<314]
+        - pip check               # [py<314]
 
   - name: py-xgboost-cpu
     build:
@@ -142,8 +139,8 @@ about:
     framework. XGBoost provides a parallel tree boosting (also known as GBDT, GBM) that solve many
     data science problems in a fast and accurate way. The same code runs on major distributed
     environment (Hadoop, SGE, MPI) and can solve problems beyond billions of examples.
-  doc_url: https://xgboost.readthedocs.io/
-  dev_url: https://github.com/dmlc/xgboost/
+  doc_url: https://xgboost.readthedocs.io
+  dev_url: https://github.com/dmlc/xgboost
 
 extra:
   feedstock-name: xgboost

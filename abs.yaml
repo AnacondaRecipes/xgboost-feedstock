@@ -1,3 +1,6 @@
+build_env_vars:
+  ANACONDA_ROCKET_ENABLE_PY314 : yes
+
 # the conda-build parameters to use
 build_parameters:
   - "--suppress-variables"

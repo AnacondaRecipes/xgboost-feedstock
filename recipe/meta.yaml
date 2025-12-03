@@ -1,5 +1,5 @@
 {% set name = "xgboost" %}
-{% set version = "3.0.1" %}
+{% set version = "3.1.2" %}
 
 # note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
 
@@ -8,8 +8,8 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/dmlc/xgboost/releases/download/v{{ version }}/xgboost-src-{{ version }}.tar.gz
-  sha256: 46e6815fd24dec7e17ed6e9327cc062da098387ee36358e3e0a43fc43939a8b1
+  url: https://github.com/dmlc/{{ name }}/releases/download/v{{ version }}/{{ name }}-src-{{ version }}.tar.gz
+  sha256: 12f2d6f735fa71e007c40171fd926c12306276dd299dc48f6c923e4f3891c33e
   patches:
     - patches/0001-remove-dep-nvidia-nccl-cu12.patch
     - patches/0002-remove-hatch-custom-build-hook.patch
@@ -32,6 +32,7 @@ outputs:
       skip: True  # [py<310]
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - cmake
@@ -41,7 +42,6 @@ outputs:
       run:
         - llvm-openmp  # [osx]
         - _openmp_mutex  # [linux]
-        - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
     test:
       commands:
         - test -f ${PREFIX}/lib/libxgboost${SHLIB_EXT}       # [unix]
@@ -64,9 +64,6 @@ outputs:
     build:
       skip: True  # [py<310]
     requirements:
-      build:
-        - patch     # [not win]
-        - m2-patch  # [win]
       host:
         - python
         - pip
@@ -79,10 +76,10 @@ outputs:
         - python
         - numpy
         - scipy
-          # mkl variant pulls in intel-openmp which conflicts with llvm-openmp. i.e. force to use openblas variant of numpy, scipy, etc.
-        - blas =*=openblas  # [osx and x86_64]
       run_constrained:
         - pandas >=1.2
+        - pyspark >=3.4
+
     test:
       requires:
         - pip

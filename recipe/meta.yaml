@@ -37,7 +37,7 @@ outputs:
         - cmake
         - ninja-base
       host:
-        - llvm-openmp 14.0.6  # [osx]
+        - llvm-openmp # [osx]
       run:
         - llvm-openmp  # [osx]
         - _openmp_mutex  # [linux]
@@ -79,15 +79,16 @@ outputs:
         - pandas >=1.2
         - pyspark >=3.4
 
-    test:
-      requires:
-        - pip
-        - scikit-learn
-      script: test-py-xgboost.py
-      imports:
-        - xgboost
-      commands:
-        - pip check
+    # no scikit-learn for 3.14, remove this constraint when 3.14 is released
+    test:                         # [py<314]
+      requires:                   # [py<314]
+        - pip                     # [py<314]
+        - scikit-learn            # [py<314]
+      script: test-py-xgboost.py  # [py<314]
+      imports:                    # [py<314]
+        - xgboost                 # [py<314]
+      commands:                   # [py<314]
+        - pip check               # [py<314]
 
   - name: py-xgboost-cpu
     build:

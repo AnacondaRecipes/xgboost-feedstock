@@ -37,7 +37,7 @@ outputs:
         - cmake
         - ninja-base
       host:
-        - llvm-openmp # [osx]
+        - llvm-openmp 20.1.8 # [osx]
       run:
         - llvm-openmp  # [osx]
         - _openmp_mutex  # [linux]

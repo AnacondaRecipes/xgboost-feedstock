@@ -32,7 +32,6 @@ outputs:
       skip: True  # [py<310]
     requirements:
       build:
-        - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - cmake
@@ -139,8 +138,8 @@ about:
     framework. XGBoost provides a parallel tree boosting (also known as GBDT, GBM) that solve many
     data science problems in a fast and accurate way. The same code runs on major distributed
     environment (Hadoop, SGE, MPI) and can solve problems beyond billions of examples.
-  doc_url: https://xgboost.readthedocs.io/
-  dev_url: https://github.com/dmlc/xgboost/
+  doc_url: https://xgboost.readthedocs.io
+  dev_url: https://github.com/dmlc/xgboost
 
 extra:
   feedstock-name: xgboost

@@ -1,5 +1,5 @@
 {% set name = "xgboost" %}
-{% set version = "3.1.2" %}
+{% set version = "3.2.0" %}
 
 # note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
 
@@ -9,14 +9,14 @@ package:
 
 source:
   url: https://github.com/dmlc/{{ name }}/releases/download/v{{ version }}/{{ name }}-src-{{ version }}.tar.gz
-  sha256: 12f2d6f735fa71e007c40171fd926c12306276dd299dc48f6c923e4f3891c33e
+  sha256: 16a31dfbc0c54544c9c36ab5f696fa7b646c125f161c52c814d757a58241a404
   patches:
     - patches/0001-remove-dep-nvidia-nccl-cu12.patch
     - patches/0002-remove-hatch-custom-build-hook.patch
 
 build:
-  skip: True  # [py<310]
   number: 0
+  skip: True  # [py<310]
 
 requirements:
   host:
@@ -79,16 +79,15 @@ outputs:
         - pandas >=1.2
         - pyspark >=3.4
 
-    # no scikit-learn for 3.14, remove this constraint when 3.14 is released
-    test:                         # [py<314]
-      requires:                   # [py<314]
-        - pip                     # [py<314]
-        - scikit-learn            # [py<314]
-      script: test-py-xgboost.py  # [py<314]
-      imports:                    # [py<314]
-        - xgboost                 # [py<314]
-      commands:                   # [py<314]
-        - pip check               # [py<314]
+    test:
+      requires:
+        - pip
+        - scikit-learn
+      script: test-py-xgboost.py
+      imports:
+        - xgboost
+      commands:
+        - pip check
 
   - name: py-xgboost-cpu
     build:

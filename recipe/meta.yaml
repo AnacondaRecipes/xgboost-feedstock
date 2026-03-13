@@ -50,7 +50,7 @@ outputs:
       host:
         - llvm-openmp 20.1.8                              # [osx]
         - cuda-version {{ cuda_compiler_version }}         # [(gpu_variant or "").startswith("cuda")]
-        - cuda-driver-dev                                  # [(gpu_variant or "").startswith("cuda")]
+        - cuda-driver-dev                                  # [(gpu_variant or "").startswith("cuda") and linux]
         - cuda-cudart-dev                                  # [(gpu_variant or "").startswith("cuda")]
         - cuda-nvrtc-dev                                   # [(gpu_variant or "").startswith("cuda")]
         - cuda-nvtx-dev                                    # [(gpu_variant or "").startswith("cuda")]

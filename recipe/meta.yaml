@@ -1,5 +1,6 @@
 {% set name = "xgboost" %}
 {% set version = "3.2.0" %}
+{% set build_number = 0 %}
 
 # note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
 
@@ -15,7 +16,7 @@ source:
     - patches/0002-remove-hatch-custom-build-hook.patch
 
 build:
-  number: 0
+  number: {{ build_number }}
   skip: True  # [py<310]
 
 requirements:
@@ -30,38 +31,61 @@ outputs:
     script: build-libxgboost.bat  # [win]
     build:
       skip: True  # [py<310]
+      number: {{ build_number + 100 }}  # [(gpu_variant or "").startswith("cuda")]
+      number: {{ build_number }}        # [not (gpu_variant or "").startswith("cuda")]
+      string: cuda{{ cuda_compiler_version | replace('.', '') }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [(gpu_variant or "").startswith("cuda")]
+      string: cpu_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}                                                  # [not (gpu_variant or "").startswith("cuda")]
+      ignore_run_exports_from:                                # [(gpu_variant or "").startswith("cuda")]
+        - {{ compiler('cuda') }}                              # [(gpu_variant or "").startswith("cuda")]
+      missing_dso_whitelist:              # [(gpu_variant or "").startswith("cuda")]
+        - "**/libcuda.so*"                # [(gpu_variant or "").startswith("cuda")]
+        - "**/nvcuda.dll"                 # [win and (gpu_variant or "").startswith("cuda")]
     requirements:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
+        - {{ compiler('cuda') }}          # [(gpu_variant or "").startswith("cuda")]
         - cmake
         - ninja-base
       host:
-        - llvm-openmp 20.1.8 # [osx]
+        - llvm-openmp 20.1.8                              # [osx]
+        - cuda-version {{ cuda_compiler_version }}         # [(gpu_variant or "").startswith("cuda")]
+        - cuda-driver-dev                                  # [(gpu_variant or "").startswith("cuda")]
+        - cuda-cudart-dev                                  # [(gpu_variant or "").startswith("cuda")]
+        - cuda-nvrtc-dev                                   # [(gpu_variant or "").startswith("cuda")]
+        - cuda-nvtx-dev                                    # [(gpu_variant or "").startswith("cuda")]
+        - nccl                                             # [(gpu_variant or "").startswith("cuda") and linux]
       run:
         - llvm-openmp  # [osx]
         - _openmp_mutex  # [linux]
+        - {{ pin_compatible('cuda-version', min_pin='x') }}  # [(gpu_variant or "").startswith("cuda")]
+        - __cuda                                              # [(gpu_variant or "").startswith("cuda")]
+        - nccl                                                # [(gpu_variant or "").startswith("cuda") and linux]
     test:
       commands:
         - test -f ${PREFIX}/lib/libxgboost${SHLIB_EXT}       # [unix]
         - if not exist %LIBRARY_BIN%\\xgboost.dll exit 1     # [win]
 
-  # Already in the main channel at this version. Commented out to not override the existing package.
-  #- name: _py-xgboost-mutex
-  #  version: 2.0
-  #  build:
-  #    skip: True  # [py<38]
-  #    string: cpu_0
-  #    number: 0
-  #  test:
-  #    commands:
-  #      - echo "Hello py boost!"
+  - name: _py-xgboost-mutex
+    version: 2.0
+    build:
+      skip: True  # [py<310]
+      string: gpu_0  # [(gpu_variant or "").startswith("cuda")]
+      string: cpu_0  # [not (gpu_variant or "").startswith("cuda")]
+      number: 0
+    test:
+      commands:
+        - echo "py-xgboost-mutex"
 
   - name: py-xgboost
     script: build-py-xgboost.sh   # [not win]
     script: build-py-xgboost.bat  # [win]
     build:
       skip: True  # [py<310]
+      number: {{ build_number + 100 }}  # [(gpu_variant or "").startswith("cuda")]
+      number: {{ build_number }}        # [not (gpu_variant or "").startswith("cuda")]
+      string: cuda{{ cuda_compiler_version | replace('.', '') }}_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [(gpu_variant or "").startswith("cuda")]
+      string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}                                                  # [not (gpu_variant or "").startswith("cuda")]
     requirements:
       host:
         - python
@@ -71,7 +95,7 @@ outputs:
         - {{ pin_subpackage('libxgboost', exact=True) }}
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
-        - _py-xgboost-mutex 2.0
+        - {{ pin_subpackage('_py-xgboost-mutex', exact=True) }}
         - python
         - numpy
         - scipy
@@ -91,7 +115,24 @@ outputs:
 
   - name: py-xgboost-cpu
     build:
-      skip: True  # [py<310]
+      skip: True  # [py<310 or (gpu_variant or "").startswith("cuda")]
+    requirements:
+      host:
+        - python
+      run:
+        - python
+        - {{ pin_subpackage('py-xgboost', exact=True) }}
+    test:
+      imports:
+        - xgboost
+      commands:
+        - pip check
+      requires:
+        - pip
+
+  - name: py-xgboost-gpu
+    build:
+      skip: True  # [py<310 or not (gpu_variant or "").startswith("cuda")]
     requirements:
       host:
         - python
@@ -109,6 +150,10 @@ outputs:
   - name: xgboost
     build:
       skip: True  # [py<310]
+      number: {{ build_number + 100 }}  # [(gpu_variant or "").startswith("cuda")]
+      number: {{ build_number }}        # [not (gpu_variant or "").startswith("cuda")]
+      string: cuda{{ cuda_compiler_version | replace('.', '') }}_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [(gpu_variant or "").startswith("cuda")]
+      string: cpu_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}                                                  # [not (gpu_variant or "").startswith("cuda")]
     requirements:
       host:
         - python

@@ -130,15 +130,15 @@ outputs:
       requires:
         - pip
 
-  - name: py-xgboost-gpu
-    build:
-      skip: True  # [py<310 or not (gpu_variant or "").startswith("cuda")]
-    requirements:
-      host:
-        - python
-      run:
-        - python
-        - {{ pin_subpackage('py-xgboost', exact=True) }}
+  # py-xgboost-gpu meta-package output removed: This was a convenience
+  # meta-package that only depended on py-xgboost (exact pin). PBP test workers
+  # lack the __cuda virtual package (provided by NVIDIA drivers), making
+  # CUDA-only packages untestable. Unlike other outputs which have both CPU/CUDA
+  # variants under the same name (allowing solver fallback to CPU during testing),
+  # py-xgboost-gpu only existed as a CUDA variant with no CPU fallback, so the
+  # PBP dry-run installability check always fails.
+  # Users: install 'xgboost' directly — solver prefers CUDA (build_number+100)
+  # when __cuda is available. Use 'py-xgboost-cpu' for explicit CPU selection.
 
   - name: xgboost
     build:

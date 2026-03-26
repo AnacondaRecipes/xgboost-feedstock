@@ -17,7 +17,7 @@ clf = xgboost.XGBClassifier(
     max_depth=2,
     learning_rate=1,
     n_estimators=10,
-    silent=True,
+    verbosity=0,
     objective='multi:softmax',
     seed=5)
 clf.fit(Xtrn, ytrn)

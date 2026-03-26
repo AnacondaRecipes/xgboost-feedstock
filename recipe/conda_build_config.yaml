@@ -1,3 +1,4 @@
+# Repeated to match gpu_variant zip_keys (none, cuda-13, cuda-13)
 c_compiler:                    # [win]
   - vs2022                     # [win]
   - vs2022                     # [win]

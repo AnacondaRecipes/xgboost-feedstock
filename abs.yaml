@@ -2,6 +2,9 @@ build_env_vars:
   ANACONDA_ROCKET_ENABLE_PY314 : yes
 
 # the conda-build parameters to use
+# --error-overdepending removed: CUDA variants add explicit run deps (__cuda,
+# cuda-version, nccl) that aren't detected as linked libs, causing false positives.
+# No other CUDA feedstock uses --error-overdepending.
 build_parameters:
   - "--suppress-variables"
   - "--error-overlinking"

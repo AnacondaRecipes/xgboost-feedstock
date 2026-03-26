@@ -35,6 +35,9 @@ outputs:
       number: {{ build_number }}        # [not (gpu_variant or "").startswith("cuda")]
       string: cuda{{ cuda_compiler_version | replace('.', '') }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [(gpu_variant or "").startswith("cuda")]
       string: cpu_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}                                                  # [not (gpu_variant or "").startswith("cuda")]
+      # Suppress CUDA compiler run_exports (tight pin); use explicit cuda-version
+      # pin_compatible(min_pin='x') instead for forward compat within major version.
+      # Follows cupy/nccl pattern — see also: nccl (Enhanced Compatibility), ucc, ucx.
       ignore_run_exports_from:                                # [(gpu_variant or "").startswith("cuda")]
         - {{ compiler('cuda') }}                              # [(gpu_variant or "").startswith("cuda")]
       missing_dso_whitelist:              # [(gpu_variant or "").startswith("cuda")]
@@ -48,7 +51,8 @@ outputs:
         - cmake
         - ninja-base
       host:
-        - llvm-openmp 20.1.8                              # [osx]
+        - llvm-openmp {{ cxx_compiler_version }}            # [osx]
+        # xgboost 3.2.0 requires CUDA >= 12.9 (CMakeLists.txt); only 13.x variants provided
         - cuda-version {{ cuda_compiler_version }}         # [(gpu_variant or "").startswith("cuda")]
         - cuda-driver-dev                                  # [(gpu_variant or "").startswith("cuda") and linux]
         - cuda-cudart-dev                                  # [(gpu_variant or "").startswith("cuda")]

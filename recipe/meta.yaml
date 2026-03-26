@@ -51,7 +51,7 @@ outputs:
         - cmake
         - ninja-base
       host:
-        - llvm-openmp 20.1.8                              # [osx]
+        - llvm-openmp                                      # [osx]
         # xgboost 3.2.0 requires CUDA >= 12.9 (CMakeLists.txt); only 13.x variants provided
         - cuda-version {{ cuda_compiler_version }}         # [(gpu_variant or "").startswith("cuda")]
         - cuda-driver-dev                                  # [(gpu_variant or "").startswith("cuda") and linux]

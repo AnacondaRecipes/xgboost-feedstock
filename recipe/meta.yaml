@@ -1,6 +1,6 @@
 {% set name = "xgboost" %}
 {% set version = "3.2.0" %}
-{% set build_number = 0 %}
+{% set build_number = 1 %}
 
 # note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
 

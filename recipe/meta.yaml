@@ -74,9 +74,9 @@ outputs:
     version: 2.0
     build:
       skip: True  # [py<310]
-      string: gpu_0  # [(gpu_variant or "").startswith("cuda")]
-      string: cpu_0  # [not (gpu_variant or "").startswith("cuda")]
-      number: 0
+      string: gpu_{{ build_number }}  # [(gpu_variant or "").startswith("cuda")]
+      string: cpu_{{ build_number }}  # [not (gpu_variant or "").startswith("cuda")]
+      number: {{ build_number }}
     test:
       commands:
         - echo "py-xgboost-mutex"

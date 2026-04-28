@@ -1,6 +1,6 @@
 {% set name = "xgboost" %}
 {% set version = "3.2.0" %}
-{% set build_number = 1 %}
+{% set build_number = 3 %}
 
 # note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
 
@@ -52,7 +52,7 @@ outputs:
         - ninja-base
       host:
         - llvm-openmp                                      # [osx]
-        # xgboost 3.2.0 requires CUDA >= 12.9 (CMakeLists.txt); only 13.x variants provided
+        # xgboost 3.2.0 requires CUDA >= 12.9 (CMakeLists.txt); 12.9 + 13.0 variants provided
         - cuda-version {{ cuda_compiler_version }}         # [(gpu_variant or "").startswith("cuda")]
         - cuda-driver-dev                                  # [(gpu_variant or "").startswith("cuda") and linux]
         - cuda-cudart-dev                                  # [(gpu_variant or "").startswith("cuda")]

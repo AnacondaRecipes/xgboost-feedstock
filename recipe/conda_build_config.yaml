@@ -1,4 +1,4 @@
-# Repeated to match gpu_variant zip_keys (none, cuda-13, cuda-13)
+# Repeated to match gpu_variant zip_keys (none, cuda-12, cuda-13)
 c_compiler:                    # [win]
   - vs2022                     # [win]
   - vs2022                     # [win]
@@ -10,20 +10,25 @@ cxx_compiler:                  # [win]
 
 gpu_variant:
   - none
-  - cuda-13                    # [linux or win]
+  - cuda-12                    # [linux or win]
   - cuda-13                    # [linux or win]
 
+# Required locally (not just inherited from parent): {{ compiler('cuda') }} reads
+# cuda_compiler from the recipe's effective CBC at metadata-eval time, and without
+# this entry it resolves to the literal "cuda_<platform>" instead of "cuda-nvcc_<platform>".
 cuda_compiler:                 # [linux or win]
   - cuda-nvcc                  # [linux or win]
 
 cuda_compiler_version:         # [linux or win]
   - none                       # [linux or win]
+  - 12.9                       # [linux or win]
   - 13.0                       # [linux or win]
-  - 13.1                       # [linux or win]
 
+# Only zip on linux/win where cuda_compiler_version exists;
+# on osx gpu_variant is always 'none' (single value, no zip needed).
 zip_keys:
-  -
-    - gpu_variant
+  -                            # [linux or win]
+    - gpu_variant              # [linux or win]
     - cuda_compiler_version    # [linux or win]
     - c_compiler               # [win]
     - cxx_compiler             # [win]

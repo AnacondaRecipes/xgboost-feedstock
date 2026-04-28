@@ -1,7 +1,7 @@
 @echo on
 
 set CUDA_ARGS=
-REM Use substring match to support future CUDA versions (cuda-13, cuda-14, etc.)
+REM Use substring match to support any CUDA major version (cuda-12, cuda-13, cuda-14, etc.)
 REM NCCL is not available on Windows, so only USE_CUDA and USE_NVTX are enabled
 if "%gpu_variant:~0,4%"=="cuda" (
     set "CUDA_ARGS=-DUSE_CUDA=ON -DUSE_NVTX=ON"

@@ -10,5 +10,4 @@ upstream_sources:
       - _py-xgboost-mutex
       - libxgboost
       - py-xgboost
-      - py-xgboost-cpu
       - xgboost

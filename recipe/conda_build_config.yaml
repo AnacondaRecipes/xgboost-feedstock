@@ -13,3 +13,8 @@ cuda_compiler_version:         # [linux or win]
   - none                       # [linux or win]
   - 12.9                       # [linux or win]
   - 13.0                       # [linux or win]
+
+zip_keys:
+  -                            # [linux or win]
+    - gpu_variant              # [linux or win]
+    - cuda_compiler_version    # [linux or win]

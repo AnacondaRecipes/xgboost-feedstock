@@ -1,6 +1,6 @@
 {% set name = "xgboost" %}
 {% set version = "3.2.0" %}
-{% set build_number = 3 %}
+{% set build_number = 4 %}
 
 # note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
 
@@ -20,6 +20,10 @@ build:
   skip: True  # [py<310]
 
 requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('cuda') }}          # [(gpu_variant or "").startswith("cuda")]
   host:
     - python
   run:
@@ -51,7 +55,9 @@ outputs:
         - cmake
         - ninja-base
       host:
+        - libgomp                                          # [linux]
         - llvm-openmp                                      # [osx]
+        - vcomp14                                          # [win and x86_64]
         # xgboost 3.2.0 requires CUDA >= 12.9 (CMakeLists.txt); 12.9 + 13.0 variants provided
         - cuda-version {{ cuda_compiler_version }}         # [(gpu_variant or "").startswith("cuda")]
         - cuda-driver-dev                                  # [(gpu_variant or "").startswith("cuda") and linux]
@@ -61,7 +67,8 @@ outputs:
         - nccl                                             # [(gpu_variant or "").startswith("cuda") and linux]
       run:
         - llvm-openmp  # [osx]
-        - _openmp_mutex  # [linux]
+        - libgomp      # [linux]
+        - vcomp14      # [win and x86_64]
         - {{ pin_compatible('cuda-version', min_pin='x') }}  # [(gpu_variant or "").startswith("cuda")]
         - __cuda                                              # [(gpu_variant or "").startswith("cuda")]
         - nccl                                                # [(gpu_variant or "").startswith("cuda") and linux]

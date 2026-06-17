@@ -1,6 +1,6 @@
 {% set name = "xgboost" %}
 {% set version = "3.2.0" %}
-{% set build_number = 4 %}
+{% set build_number = 5 %}
 
 # note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
 
@@ -20,10 +20,6 @@ build:
   skip: True  # [py<310]
 
 requirements:
-  build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler('cuda') }}          # [(gpu_variant or "").startswith("cuda")]
   host:
     - python
   run:

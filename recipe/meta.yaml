@@ -106,7 +106,7 @@ outputs:
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
         #- {{ pin_subpackage('_py-xgboost-mutex', exact=True) }}
-        - _py-xgboost-mutex
+        - _py-xgboost-mutex ==2.0
         - python
         - numpy
         - scipy

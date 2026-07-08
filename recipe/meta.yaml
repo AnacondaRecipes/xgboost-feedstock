@@ -107,7 +107,8 @@ outputs:
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
         #- {{ pin_subpackage('_py-xgboost-mutex', exact=True) }}
-        - _py-xgboost-mutex ==2.0
+        - _py-xgboost-mutex ==2.0=cpu_*  # [not (gpu_variant or "").startswith("cuda")]
+        - _py-xgboost-mutex ==2.0=gpu_*  # [(gpu_variant or "").startswith("cuda")]
         - python
         - numpy
         - scipy

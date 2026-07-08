@@ -1,8 +1,6 @@
 {% set name = "xgboost" %}
-{% set version = "3.2.0" %}
-{% set build_number = 4 %}
-
-# note: r-xgboost is built from https://github.com/AnacondaRecipes/aggregateR/tree/R-4.3.1/r-xgboost-feedstock
+{% set version = "3.3.0" %}
+{% set build_number = 0 %}
 
 package:
   name: {{ name|lower }}-split
@@ -10,14 +8,14 @@ package:
 
 source:
   url: https://github.com/dmlc/{{ name }}/releases/download/v{{ version }}/{{ name }}-src-{{ version }}.tar.gz
-  sha256: 16a31dfbc0c54544c9c36ab5f696fa7b646c125f161c52c814d757a58241a404
+  sha256: 22d4fba822fba5cd02299bf0c63ec68ff72606bc1b1bd910423d4b83c2f108ff
   patches:
     - patches/0001-remove-dep-nvidia-nccl-cu12.patch
     - patches/0002-remove-hatch-custom-build-hook.patch
 
 build:
   number: {{ build_number }}
-  skip: True  # [py<310]
+  skip: true  # [py<312]
 
 requirements:
   build:
@@ -34,7 +32,7 @@ outputs:
     script: build-libxgboost.sh   # [not win]
     script: build-libxgboost.bat  # [win]
     build:
-      skip: True  # [py<310]
+      skip: True  # [py<312]
       number: {{ build_number + 100 }}  # [(gpu_variant or "").startswith("cuda")]
       number: {{ build_number }}        # [not (gpu_variant or "").startswith("cuda")]
       string: cuda{{ cuda_compiler_version | replace('.', '') }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [(gpu_variant or "").startswith("cuda")]
@@ -58,8 +56,10 @@ outputs:
         - libgomp                                          # [linux]
         - llvm-openmp                                      # [osx]
         - vcomp14                                          # [win and x86_64]
-        # xgboost 3.2.0 requires CUDA >= 12.9 (CMakeLists.txt); 12.9 + 13.0 variants provided
+        # xgboost 3.3.0 requires CUDA >= 12.9 (CMakeLists.txt); 12.9 + 13.0 variants provided
+        # https://github.com/dmlc/xgboost/blob/v3.3.0/CMakeLists.txt#L248
         - cuda-version {{ cuda_compiler_version }}         # [(gpu_variant or "").startswith("cuda")]
+        - cuda-cccl {{ cuda_compiler_version }}            # [(gpu_variant or "").startswith("cuda")]
         - cuda-driver-dev                                  # [(gpu_variant or "").startswith("cuda") and linux]
         - cuda-cudart-dev                                  # [(gpu_variant or "").startswith("cuda")]
         - cuda-nvrtc-dev                                   # [(gpu_variant or "").startswith("cuda")]
@@ -77,22 +77,22 @@ outputs:
         - test -f ${PREFIX}/lib/libxgboost${SHLIB_EXT}       # [unix]
         - if not exist %LIBRARY_BIN%\\xgboost.dll exit 1     # [win]
 
-  - name: _py-xgboost-mutex
-    version: 2.0
-    build:
-      skip: True  # [py<310]
-      string: gpu_{{ build_number }}  # [(gpu_variant or "").startswith("cuda")]
-      string: cpu_{{ build_number }}  # [not (gpu_variant or "").startswith("cuda")]
-      number: {{ build_number }}
-    test:
-      commands:
-        - echo "py-xgboost-mutex"
+#  - name: _py-xgboost-mutex
+#    version: 2.0
+#    build:
+#      skip: True  # [py<312]
+#      string: gpu_{{ build_number }}  # [(gpu_variant or "").startswith("cuda")]
+#      string: cpu_{{ build_number }}  # [not (gpu_variant or "").startswith("cuda")]
+#      number: {{ build_number }}
+#    test:
+#      commands:
+#        - echo "py-xgboost-mutex"
 
   - name: py-xgboost
     script: build-py-xgboost.sh   # [not win]
     script: build-py-xgboost.bat  # [win]
     build:
-      skip: True  # [py<310]
+      skip: True  # [py<312]
       number: {{ build_number + 100 }}  # [(gpu_variant or "").startswith("cuda")]
       number: {{ build_number }}        # [not (gpu_variant or "").startswith("cuda")]
       string: cuda{{ cuda_compiler_version | replace('.', '') }}_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [(gpu_variant or "").startswith("cuda")]
@@ -106,13 +106,15 @@ outputs:
         - {{ pin_subpackage('libxgboost', exact=True) }}
       run:
         - {{ pin_subpackage('libxgboost', exact=True) }}
-        - {{ pin_subpackage('_py-xgboost-mutex', exact=True) }}
+        #- {{ pin_subpackage('_py-xgboost-mutex', exact=True) }}
+        - _py-xgboost-mutex ==2.0=cpu_*  # [not (gpu_variant or "").startswith("cuda")]
+        - _py-xgboost-mutex ==2.0=gpu_*  # [(gpu_variant or "").startswith("cuda")]
         - python
         - numpy
         - scipy
       run_constrained:
         - pandas >=1.2
-        - pyspark >=3.4
+        - pyspark >=4.0
 
     test:
       requires:
@@ -126,7 +128,7 @@ outputs:
 
   - name: py-xgboost-cpu
     build:
-      skip: True  # [py<310 or (gpu_variant or "").startswith("cuda")]
+      skip: True  # [py<312 or (gpu_variant or "").startswith("cuda")]
     requirements:
       host:
         - python
@@ -153,7 +155,7 @@ outputs:
 
   - name: xgboost
     build:
-      skip: True  # [py<310]
+      skip: True  # [py<312]
       number: {{ build_number + 100 }}  # [(gpu_variant or "").startswith("cuda")]
       number: {{ build_number }}        # [not (gpu_variant or "").startswith("cuda")]
       string: cuda{{ cuda_compiler_version | replace('.', '') }}_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [(gpu_variant or "").startswith("cuda")]

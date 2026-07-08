@@ -114,7 +114,7 @@ outputs:
         - scipy
       run_constrained:
         - pandas >=1.2
-        - pyspark >=3.4
+        - pyspark >=4.0
 
     test:
       requires:

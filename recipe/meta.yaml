@@ -2,15 +2,6 @@
 {% set version = "3.4.1" %}
 {% set build_number = 0 %}
 
-#  - name: _py-xgboost-mutex
-#    version: 2.0
-#    build:
-#      skip: True  # [py<312]
-#      string: gpu_{{ build_number }}  # [(gpu_variant or "").startswith("cuda")]
-#      string: cpu_{{ build_number }}  # [not (gpu_variant or "").startswith("cuda")]
-#      number: {{ build_number }}
-#    test:
-#      commands:
 package:
   name: {{ name|lower }}-split
   version: {{ version }}
@@ -18,9 +9,6 @@ package:
 source:
   url: https://github.com/dmlc/{{ name }}/releases/download/v{{ version }}/{{ name }}-src-{{ version }}.tar.gz
   sha256: 34a5cb99a67bb98b44f204767eeeae642b65a86b2ecfca60082e4d74fd4d169a
-  patches:
-    - patches/0001-remove-dep-nvidia-nccl-cu12.patch
-    - patches/0002-remove-hatch-custom-build-hook.patch
 
 build:
   number: 0
@@ -86,38 +74,16 @@ outputs:
         - test -f ${PREFIX}/lib/libxgboost${SHLIB_EXT}  # [unix]
         - if not exist %LIBRARY_BIN%\\xgboost.dll exit 1  # [win]
 
-about:
-  home: https://github.com/dmlc/xgboost
-  license: Apache-2.0
-  license_family: Apache
-  license_file: LICENSE
-  summary: |
-    Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library, for
-    Python, R, Java, Scala, C++ and more. Runs on single machine, Hadoop, Spark, Flink
-    and DataFlow
-  description: |
-    XGBoost is an optimized distributed gradient boosting library designed to be highly efficient,
-    flexible and portable. It implements machine learning algorithms under the Gradient Boosting
-    framework. XGBoost provides a parallel tree boosting (also known as GBDT, GBM) that solve many
-    data science problems in a fast and accurate way. The same code runs on major distributed
-    environment (Hadoop, SGE, MPI) and can solve problems beyond billions of examples.
-  doc_url: https://xgboost.readthedocs.io
-  dev_url: https://github.com/dmlc/xgboost
-
-extra:
-  feedstock-name: xgboost
-  recipe-maintainers:
-    - aldanor
-    - fhoehle
-    - jakirkham
-    - ksangeek
-    - xhochy
-  skip-lints:
-    # output "py-xgboost": Test commands are not executed when run_test.sh (.bat...) is present.
-    # test-py-xgboost.py is used
-    - has_run_test_and_commands
-
-<conda_recipe_manager.types.SentinelType object at 0x7fa3794e2270>:  #        - echo "py-xgboost-mutex"
+#  - name: _py-xgboost-mutex
+#    version: 2.0
+#    build:
+#      skip: True  # [py<312]
+#      string: gpu_{{ build_number }}  # [(gpu_variant or "").startswith("cuda")]
+#      string: cpu_{{ build_number }}  # [not (gpu_variant or "").startswith("cuda")]
+#      number: {{ build_number }}
+#    test:
+#      commands:
+#        - echo "py-xgboost-mutex"
   - name: py-xgboost
     script: build-py-xgboost.sh  # [not win]
     script: build-py-xgboost.bat  # [win]
@@ -131,7 +97,7 @@ extra:
       host:
         - python
         - pip
-        - hatchling >=1.12.1
+        - scikit-build-core >=0.11.0
         - packaging >=21.3
         - {{ pin_subpackage('libxgboost', exact=True) }}
       run:
@@ -199,3 +165,34 @@ extra:
         - pip check
       requires:
         - pip
+
+about:
+  home: https://github.com/dmlc/xgboost
+  license: Apache-2.0
+  license_family: Apache
+  license_file: LICENSE
+  summary: |
+    Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library, for
+    Python, R, Java, Scala, C++ and more. Runs on single machine, Hadoop, Spark, Flink
+    and DataFlow
+  description: |
+    XGBoost is an optimized distributed gradient boosting library designed to be highly efficient,
+    flexible and portable. It implements machine learning algorithms under the Gradient Boosting
+    framework. XGBoost provides a parallel tree boosting (also known as GBDT, GBM) that solve many
+    data science problems in a fast and accurate way. The same code runs on major distributed
+    environment (Hadoop, SGE, MPI) and can solve problems beyond billions of examples.
+  doc_url: https://xgboost.readthedocs.io
+  dev_url: https://github.com/dmlc/xgboost
+
+extra:
+  feedstock-name: xgboost
+  recipe-maintainers:
+    - aldanor
+    - fhoehle
+    - jakirkham
+    - ksangeek
+    - xhochy
+  skip-lints:
+    # output "py-xgboost": Test commands are not executed when run_test.sh (.bat...) is present.
+    # test-py-xgboost.py is used
+    - has_run_test_and_commands

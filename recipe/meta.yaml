@@ -1,6 +1,6 @@
 {% set name = "xgboost" %}
 {% set version = "3.4.1" %}
-{% set build_number = 0 %}
+{% set build_number = 1 %}
 
 package:
   name: {{ name|lower }}-split
@@ -56,7 +56,9 @@ outputs:
         # xgboost 3.3.0 requires CUDA >= 12.9 (CMakeLists.txt); 12.9 + 13.0 variants provided
         # https://github.com/dmlc/xgboost/blob/v3.3.0/CMakeLists.txt#L248
         - cuda-version {{ cuda_compiler_version }}  # [(gpu_variant or "").startswith("cuda")]
-        - cuda-cccl {{ cuda_compiler_version }}  # [(gpu_variant or "").startswith("cuda")]
+        - cuda-cccl {{ cuda_compiler_version }}  # [(gpu_variant or "").startswith("cuda") and not (win and arm64)]
+        # This version is for CUDA 13.4 which is first CUDA version with win-arm64 support
+        - cuda-cccl  13.3.4.3.1  # [(gpu_variant or "").startswith("cuda") and (win and arm64)]
         - cuda-driver-dev  # [(gpu_variant or "").startswith("cuda") and linux]
         - cuda-cudart-dev  # [(gpu_variant or "").startswith("cuda")]
         - cuda-nvrtc-dev  # [(gpu_variant or "").startswith("cuda")]

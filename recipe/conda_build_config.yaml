@@ -1,6 +1,6 @@
 gpu_variant:
   - none
-  - cuda-12                    # [linux or win]
+  - cuda-12                    # [linux or win64]
   - cuda-13                    # [linux or win]
 
 # Required locally (not just inherited from parent): {{ compiler('cuda') }} reads
@@ -11,8 +11,9 @@ cuda_compiler:                 # [linux or win]
 
 cuda_compiler_version:         # [linux or win]
   - none                       # [linux or win]
-  - 12.9                       # [linux or win]
-  - 13.0                       # [linux or win]
+  - 12.9                       # [linux or win64]
+  - 13.0                       # [linux or win64]
+  - 13.4                       # [win and arm64]
 
 zip_keys:
   -                            # [linux or win]
